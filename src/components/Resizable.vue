@@ -1,4 +1,5 @@
 <template>
+  <div id="resizable">
       <div class="wrapper">
         <div class="workspace" ref="workspace">
           <FreeTransform
@@ -20,7 +21,8 @@
               {{ element.text }}
             </div>
           </FreeTransform>
-      </div>
+        </div>
+    </div>
   </div>
 </template>
 
@@ -132,7 +134,7 @@ export default {
 </script>
 
 <style>
-#app {
+#resizable {
   display: flex;
   background: #f8fafc;
 }
