@@ -11,6 +11,9 @@
          <b-button variant="secondary" @click="addText">
           Label
         </b-button>
+        <b-button variant="secondary" @click="addLine">
+        Line
+        </b-button>
       </b-button-group>
 
       <v-stage ref="stageEl" :config="stageSize" @mouseDown="handleStageMouseDown">
@@ -19,6 +22,7 @@
             <v-circle v-for="item in circles" :key="item.id" :config="item" @transformend="handleTransformEnd"/>
             <v-image v-for="item in images" :key="item.id" :config="item" @transformend="handleTransformEnd"/>
             <v-text v-for="item in labels" :key="item.id" :config="item" @transformend="handleTransformEnd"/>
+            <v-line v-for="item in lines" :key="item.id" :config="item" @transformend="handleTransformEnd"/>
             <v-transformer ref="transformer" />
         </v-layer>
       </v-stage>
@@ -65,6 +69,15 @@ export default {
                     draggable: true,
                     width: 200,
                     name: 'text1'
+                }
+            ],
+            lines: [
+                {
+                    x: 100,
+                    y: 50,
+                    points: [73, 70, 340, 23, 450, 60, 500, 20],
+                    stroke: 'red',
+                    name: 'line1'
                 }
             ],
             selectedShapeName: ''
@@ -160,6 +173,9 @@ export default {
             this.rectangles.push(rect);
             // this.$refs.layerEl.
             console.log("Add rectangle");
+        },
+        addLine() {
+
         },
         addCircle() {
             const circ = {
