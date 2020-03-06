@@ -14,12 +14,22 @@ Vue.use(BootstrapVue)
 Vue.use(VueRouter)
 Vue.use(VueKonva)
 
-const routes = [
-  { path: '/', component: HelloWorld },
-  { path: '/resizable', component: Resizable },
-  { path: '/canvas', component: WhiteBoard }
-]
+var Component = Vue.extend({
+  data: function () {
+    return { a: 1 }
+  }
+});
 
+Vue.component('Robert',Component);
+
+var circele = Vue.component('vCircle');
+if (circele) {
+  const routes = [
+    { path: '/', component: HelloWorld },
+    { path: '/resizable', component: Resizable },
+    { path: '/canvas', component: WhiteBoard }
+  ]
+  
 const router = new VueRouter({
   routes
 })
@@ -30,3 +40,6 @@ new Vue({
   router,
   render: h => h(App),
 }).$mount('#app')
+}
+
+
