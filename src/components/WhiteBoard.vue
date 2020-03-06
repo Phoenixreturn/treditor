@@ -8,6 +8,9 @@
         <b-button variant="secondary" @click="addCircle">
           Circle
         </b-button>
+         <b-button variant="secondary" @click="addText">
+          Label
+        </b-button>
       </b-button-group>
 
       <v-stage ref="stageEl" :config="stageSize" @mouseDown="handleStageMouseDown">
@@ -15,6 +18,7 @@
             <v-rect v-for="item in rectangles" :key="item.id" :config="item" @transformend="handleTransformEnd"/>
             <v-circle v-for="item in circles" :key="item.id" :config="item" @transformend="handleTransformEnd"/>
             <v-image v-for="item in images" :key="item.id" :config="item" @transformend="handleTransformEnd"/>
+            <v-text v-for="item in labels" :key="item.id" :config="item" @transformend="handleTransformEnd"/>
             <v-transformer ref="transformer" />
         </v-layer>
       </v-stage>
@@ -52,6 +56,17 @@ export default {
             ],
             circles: [],
             images: [],
+            labels: [
+                {
+                    text: "type here",
+                    x: 50,
+                    y: 80,
+                    fontSize: 20,
+                    draggable: true,
+                    width: 200,
+                    name: 'text1'
+                }
+            ],
             selectedShapeName: ''
         }
     },
@@ -95,7 +110,12 @@ export default {
                 if (circ) {
                     this.selectedShapeName = name;
                 } else {
-                    this.selectedShapeName = '';
+                    const txt = this.labels.find(r => r.name === name);
+                    if (txt) {
+                        this.selectedShapeName = name;
+                    } else {
+                        this.selectedShapeName = '';
+                    }                    
                 }                
             }
             this.updateTransformer();
@@ -153,6 +173,20 @@ export default {
                 name: `circ${this.circles.length + 1}`,
             };
             this.circles.push(circ);
+        },
+        addText() {
+            const text = {
+                x: this.getRandomInt(100),
+                y: this.getRandomInt(100),
+                width: 200,
+                height: 100,
+                fill: "orange",
+                draggable: true,
+                text: `text${this.labels.length + 1}`,
+                id: `text${this.labels.length + 1}`,
+                name: `text${this.labels.length + 1}`,
+            }
+            this.labels.push(text);
         }
     }
 }
