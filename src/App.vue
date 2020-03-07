@@ -8,7 +8,7 @@
 <script>
 
 import NavigationBar from './components/NavigationBar'
-
+import Vue from 'vue'
 export default {
   name: 'App',
   components: {

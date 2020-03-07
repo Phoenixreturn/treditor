@@ -24,6 +24,7 @@
             <v-text v-for="item in labels" :key="item.id" :config="item" @transformend="handleTransformEnd"/>
             <v-line v-for="item in lines" :key="item.id" :config="item" @transformend="handleTransformEnd"/>
             <v-transformer ref="transformer" />
+            <KonvaPolyLine :points="[{x:100,y:100}, {x:140,y:140}, {x:180,y:140}, {x:240,y:90}]"></KonvaPolyLine>
         </v-layer>
       </v-stage>
     </div>
@@ -35,10 +36,14 @@
 // import Image from "./primitives/Image";
 import Konva from 'konva';
 import Vue from 'vue';
+import KonvaPolyLine from './KonvaPolyLine'
 // const uuidv1 = require("uuid/v1");
 
 export default {
     name: 'WhiteBoard',
+    components: {
+        KonvaPolyLine
+    },
     data() {
         return {
             stageSize: {
@@ -85,55 +90,6 @@ export default {
         }
     },
     methods: {
-        buildAnchor(x, y) {
-           var kCircle = Vue.component('vCircle');
-
-            var anchor = new kCircle({
-                propsData: {
-                    config: {
-                        x: x,
-                        y: y,
-                        radius: 20,
-                        stroke: '#666',
-                        fill: 'green',
-                        strokeWidth: 2,
-                        draggable: true 
-                    },
-                    key: "xyz123"
-                }
-            });
-            //  var anchor = new Konva.Circle({
-            //     x: x,
-            //     y: y,
-            //     radius: 20,
-            //     stroke: '#666',
-            //     fill: 'green',
-            //     strokeWidth: 2,
-            //     draggable: true }
-            // );
-
-            // add hover styling
-            // anchor.on('mouseover', function() {
-            //     document.body.style.cursor = 'pointer';
-            //     this.strokeWidth(4);
-            //     this.$refs.layerEl.draw();
-            // });
-            // anchor.on('mouseout', function() {
-            //     document.body.style.cursor = 'default';
-            //     this.strokeWidth(2);
-            //       this.$refs.layerEl.draw();
-            // });
-
-            // anchor.on('dragend', function() {
-            //     drawCurves();
-            //     updateDottedLines();
-            // });
-
-            // this.$refs.layerEl.getNode().add(anchor);
-            this.$refs.layerEl.getNode().add(anchor.getNode());
-            this.$refs.layerEl.getNode().draw();
-            return anchor;
-        },
         handleTransformEnd(e) {
             // shape is transformed, let us save new attrs back to the node
             // find element in our state
