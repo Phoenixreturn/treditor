@@ -1,12 +1,11 @@
 <template>
-  <div id="app">
+  <v-app>
     <NavigationBar></NavigationBar>
      <router-view></router-view>
-  </div>
+   </v-app>
 </template>
 
 <script>
-
 import NavigationBar from './components/NavigationBar'
 import Vue from 'vue'
 export default {

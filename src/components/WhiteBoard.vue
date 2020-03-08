@@ -1,6 +1,9 @@
 <template>
     <div className="whiteboard">
-      <h1>Whiteboard</h1>
+            <h1>Whiteboard</h1>
+        <v-container>
+            <v-row :align="centered">
+            
       <b-button-group>
         <b-button variant="secondary" @click="addRectangle">
           Rectangle
@@ -15,6 +18,9 @@
         Line
         </b-button>
       </b-button-group>
+            </v-row>
+            <v-row no-gutters>
+                 
 
       <v-stage ref="stageEl" :config="stageSize" @mouseDown="handleStageMouseDown">
         <v-layer ref="layerEl">
@@ -27,13 +33,14 @@
             <KonvaPolyLine :points="[{x:100,y:100}, {x:140,y:140}, {x:180,y:140}, {x:240,y:90}]"></KonvaPolyLine>
         </v-layer>
       </v-stage>
+      <v-treeview :items="items" style="width:500"></v-treeview>
+            </v-row>
+        </v-container>
+     
     </div>
 </template>
 
 <script>
-// import Rectangle from "./primitives/Rectangle";
-// import Circle from "./primitives/Circle";
-// import Image from "./primitives/Image";
 import Konva from 'konva';
 import Vue from 'vue';
 import KonvaPolyLine from './KonvaPolyLine'
@@ -46,6 +53,78 @@ export default {
     },
     data() {
         return {
+            items: [
+                {
+                    id: 1,
+                    name: 'Applications :',
+                    children: [
+                    { id: 2, name: 'Calendar : app' },
+                    { id: 3, name: 'Chrome : app' },
+                    { id: 4, name: 'Webstorm : app' },
+                    ],
+                },
+            {
+                    id: 5,
+                    name: 'Documents :',
+                    children: [
+                    {
+                    id: 6,
+                    name: 'vuetify :',
+                    children: [
+                    {
+                    id: 7,
+                    name: 'src :',
+                    children: [
+                        { id: 8, name: 'index : ts' },
+                        { id: 9, name: 'bootstrap : ts' },
+                    ],
+                    },
+                    ],
+            },
+            {
+            id: 10,
+            name: 'material2 :',
+            children: [
+            {
+            id: 11,
+            name: 'src :',
+            children: [
+                { id: 12, name: 'v-btn : ts' },
+                { id: 13, name: 'v-card : ts' },
+                { id: 14, name: 'v-window : ts' },
+            ],
+            },
+            ],
+            },
+            ],
+            },
+            {
+            id: 15,
+            name: 'Downloads :',
+            children: [
+            { id: 16, name: 'October : pdf' },
+            { id: 17, name: 'November : pdf' },
+            { id: 18, name: 'Tutorial : html' },
+            ],
+            },
+            {
+            id: 19,
+            name: 'Videos :',
+            children: [
+            {
+            id: 20,
+            name: 'Tutorials :',
+            children: [
+            { id: 21, name: 'Basic layouts : mp4' },
+            { id: 22, name: 'Advanced techniques : mp4' },
+            { id: 23, name: 'All about app : dir' },
+            ],
+            },
+            { id: 24, name: 'Intro : mov' },
+            { id: 25, name: 'Conference introduction : avi' },
+            ],
+            },
+            ],
             stageSize: {
                 width: 500,
                 height: 500

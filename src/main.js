@@ -8,11 +8,20 @@ import Resizable from './components/Resizable.vue'
 import WhiteBoard from './components/WhiteBoard.vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import vuetify from './plugins/vuetify';
+import {store} from './store';
 
 // Install BootstrapVue
 Vue.use(BootstrapVue)
 Vue.use(VueRouter)
 Vue.use(VueKonva)
+
+export const store = new Vuex.Store({
+  state: {},
+  getters: {},
+  mutations: {},
+  actions: {},
+});
 
 const routes = [
   { path: '/', component: HelloWorld },
@@ -27,7 +36,9 @@ routes
 Vue.config.productionTip = false
 
 new Vue({
-router,
-render: h => h(App),
+  router,
+  store,
+  vuetify,
+  render: h => h(App)
 }).$mount('#app')
 
