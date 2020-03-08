@@ -16,13 +16,6 @@ Vue.use(BootstrapVue)
 Vue.use(VueRouter)
 Vue.use(VueKonva)
 
-export const store = new Vuex.Store({
-  state: {},
-  getters: {},
-  mutations: {},
-  actions: {},
-});
-
 const routes = [
   { path: '/', component: HelloWorld },
   { path: '/resizable', component: Resizable },

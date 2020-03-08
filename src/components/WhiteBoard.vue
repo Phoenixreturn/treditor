@@ -22,18 +22,17 @@
             <v-row no-gutters>
                  
 
-      <v-stage ref="stageEl" :config="stageSize" @mouseDown="handleStageMouseDown">
+      <v-stage ref="stageEl" :config="stageSize" @mouseDown="handleStageMouseDown" style="background: #dfffff">
         <v-layer ref="layerEl">
             <v-rect v-for="item in rectangles" :key="item.id" :config="item" @transformend="handleTransformEnd"/>
             <v-circle v-for="item in circles" :key="item.id" :config="item" @transformend="handleTransformEnd"/>
             <v-image v-for="item in images" :key="item.id" :config="item" @transformend="handleTransformEnd"/>
             <v-text v-for="item in labels" :key="item.id" :config="item" @transformend="handleTransformEnd"/>
-            <v-line v-for="item in lines" :key="item.id" :config="item" @transformend="handleTransformEnd"/>
+            <KonvaPolyLine v-for="item in lines" :key="item.id" :points="item.points" @transformend="handleTransformEnd"/>
             <v-transformer ref="transformer" />
-            <KonvaPolyLine :points="[{x:100,y:100}, {x:140,y:140}, {x:180,y:140}, {x:240,y:90}]"></KonvaPolyLine>
         </v-layer>
       </v-stage>
-      <v-treeview :items="items" style="width:500"></v-treeview>
+      <v-treeview :items="items"></v-treeview>
             </v-row>
         </v-container>
      
@@ -51,80 +50,13 @@ export default {
     components: {
         KonvaPolyLine
     },
+    computed: {
+        items: function() {
+            return this.rectangles.concat(this.lines).concat(this.labels).concat(this.circles);
+        }
+    },
     data() {
-        return {
-            items: [
-                {
-                    id: 1,
-                    name: 'Applications :',
-                    children: [
-                    { id: 2, name: 'Calendar : app' },
-                    { id: 3, name: 'Chrome : app' },
-                    { id: 4, name: 'Webstorm : app' },
-                    ],
-                },
-            {
-                    id: 5,
-                    name: 'Documents :',
-                    children: [
-                    {
-                    id: 6,
-                    name: 'vuetify :',
-                    children: [
-                    {
-                    id: 7,
-                    name: 'src :',
-                    children: [
-                        { id: 8, name: 'index : ts' },
-                        { id: 9, name: 'bootstrap : ts' },
-                    ],
-                    },
-                    ],
-            },
-            {
-            id: 10,
-            name: 'material2 :',
-            children: [
-            {
-            id: 11,
-            name: 'src :',
-            children: [
-                { id: 12, name: 'v-btn : ts' },
-                { id: 13, name: 'v-card : ts' },
-                { id: 14, name: 'v-window : ts' },
-            ],
-            },
-            ],
-            },
-            ],
-            },
-            {
-            id: 15,
-            name: 'Downloads :',
-            children: [
-            { id: 16, name: 'October : pdf' },
-            { id: 17, name: 'November : pdf' },
-            { id: 18, name: 'Tutorial : html' },
-            ],
-            },
-            {
-            id: 19,
-            name: 'Videos :',
-            children: [
-            {
-            id: 20,
-            name: 'Tutorials :',
-            children: [
-            { id: 21, name: 'Basic layouts : mp4' },
-            { id: 22, name: 'Advanced techniques : mp4' },
-            { id: 23, name: 'All about app : dir' },
-            ],
-            },
-            { id: 24, name: 'Intro : mov' },
-            { id: 25, name: 'Conference introduction : avi' },
-            ],
-            },
-            ],
+        return {          
             stageSize: {
                 width: 500,
                 height: 500
@@ -140,6 +72,7 @@ export default {
                     scaleY: 1,
                     fill: 'red',
                     name: 'rect1',
+                    id: 'rect1',
                     draggable: true
                 }
             ],
@@ -153,16 +86,15 @@ export default {
                     fontSize: 20,
                     draggable: true,
                     width: 200,
-                    name: 'text1'
+                    name: 'text1',
+                    id: 'text1'
                 }
             ],
             lines: [
                 {
-                    x: 100,
-                    y: 50,
-                    points: [73, 70, 340, 23, 450, 60, 500, 20],
-                    stroke: 'red',
-                    name: 'line1'
+                    id: 'line1',
+                    name: 'line1',
+                    points: [{x:100,y:100}, {x:140,y:140}, {x:180,y:140}, {x:240,y:90}]
                 }
             ],
             selectedShapeName: ''
@@ -260,7 +192,6 @@ export default {
             console.log("Add rectangle");
         },
         addLine() {
-            this.buildAnchor(73, 70);
         },
         addCircle() {
             const circ = {
