@@ -42,6 +42,7 @@
 <script>
 import Konva from 'konva';
 import Vue from 'vue';
+import axios from 'axios'
 import KonvaPolyLine from './KonvaPolyLine'
 // const uuidv1 = require("uuid/v1");
 
@@ -55,8 +56,18 @@ export default {
             return this.rectangles.concat(this.lines).concat(this.labels).concat(this.circles);
         }
     },
+    created: function() {
+        axios.get('http://192.168.0.100/springtest/primitives').then(response => {
+            this.primitives = response.data
+        })
+        .catch(e => {
+            this.errors.push(e);
+        })
+    },
     data() {
-        return {          
+        return {    
+            primitives: [],
+            errors: [],      
             stageSize: {
                 width: 500,
                 height: 500
