@@ -2,7 +2,7 @@
     <div className="whiteboard">
             <h1>Whiteboard</h1>
         <v-container>
-            <v-row :align="centered">
+            <v-row align="center">
             
       <b-button-group>
         <b-button variant="secondary" @click="addRectangle">
@@ -57,9 +57,10 @@ export default {
         }
     },
     created: function() {
-        axios.get('http://192.168.0.100/springtest/primitives').then(response => {
-            this.primitives = response.data
-        })
+        axios.get('http://192.168.0.103:8080/springtest/primitives').then(function(response) {
+            this.rectangles[0].children = response.data
+            this.rectangles[0].children.push({id: "100", name: "svfdsdfv"})
+        }.bind(this))
         .catch(e => {
             this.errors.push(e);
         })
@@ -84,7 +85,8 @@ export default {
                     fill: 'red',
                     name: 'rect1',
                     id: 'rect1',
-                    draggable: true
+                    draggable: true,
+                    children: []
                 }
             ],
             circles: [],
