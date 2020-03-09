@@ -24,15 +24,23 @@
 
       <v-stage ref="stageEl" :config="stageSize" @mouseDown="handleStageMouseDown" style="background: #dfffff">
         <v-layer ref="layerEl">
-            <v-rect v-for="item in rectangles" :key="item.id" :config="item" @transformend="handleTransformEnd"/>
-            <v-circle v-for="item in circles" :key="item.id" :config="item" @transformend="handleTransformEnd"/>
+            <v-rect v-for="item in rectangles" :key="item.id" :config="item" @transformend="handleTransformEnd" @click="setTreeItem"/>
+            <v-circle v-for="item in circles" :key="item.id" :config="item" @transformend="handleTransformEnd" @click="setTreeItem"/>
             <v-image v-for="item in images" :key="item.id" :config="item" @transformend="handleTransformEnd"/>
-            <v-text v-for="item in labels" :key="item.id" :config="item" @transformend="handleTransformEnd"/>
+            <v-text v-for="item in labels" :key="item.id" :config="item" @transformend="handleTransformEnd" @click="setTreeItem"/>
             <KonvaPolyLine v-for="item in lines" :key="item.id" :points="item.points" @transformend="handleTransformEnd"/>
             <v-transformer ref="transformer" />
         </v-layer>
       </v-stage>
       <v-treeview :items="items"></v-treeview>
+       <JsonEditor
+        :options="{
+            confirmText: 'confirm',
+            cancelText: 'cancel',
+        }"
+        :objData="selectedObj" 
+        v-model="selectedObj" >
+    </JsonEditor>
             </v-row>
         </v-container>
      
@@ -44,6 +52,9 @@ import Konva from 'konva';
 import Vue from 'vue';
 import axios from 'axios'
 import KonvaPolyLine from './KonvaPolyLine'
+import JsonEditor from './treeview'
+  
+Vue.use(JsonEditor)
 // const uuidv1 = require("uuid/v1");
 
 export default {
@@ -66,7 +77,21 @@ export default {
         })
     },
     data() {
-        return {    
+        return {
+            selectedObj: {},
+              color: '#59c7f9',
+                suckerCanvas: null,
+                suckerArea: [],
+                isSucking: false,
+             headers: [
+                {
+                text: 'Name of property',
+                align: 'start',
+                sortable: false,
+                value: 'name',
+                },
+                { text: 'Value', value: 'value' },
+            ],
             primitives: [],
             errors: [],      
             stageSize: {
@@ -82,7 +107,7 @@ export default {
                     height: 100,
                     scaleX: 1,
                     scaleY: 1,
-                    fill: 'red',
+                    fill: '##00ff78',
                     name: 'rect1',
                     id: 'rect1',
                     draggable: true,
@@ -114,6 +139,32 @@ export default {
         }
     },
     methods: {
+        setTreeItem(e) {
+             // clicked on stage - clear selection
+            if (e.target === e.target.getStage()) {
+                this.selectedObj = {}
+                return;
+            }
+
+            // clicked on transformer - do nothing
+            const clickedOnTransformer =
+            e.target.getParent().className === 'Transformer';
+            if (clickedOnTransformer) {
+              return;
+            }
+
+            // find clicked rect by its name
+            const name = e.target.name();
+            const rect = this.rectangles.find(r => r.name === name);
+            if (rect) {
+                this.selectedObj = rect;
+            } else {
+                const circ = this.circles.find(r => r.name === name);
+                if (circ) {
+                   this.selectedObj = circ;
+                }            
+            }
+        },
         handleTransformEnd(e) {
             // shape is transformed, let us save new attrs back to the node
             // find element in our state
