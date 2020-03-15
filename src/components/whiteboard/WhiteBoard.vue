@@ -8,11 +8,18 @@
             </v-row>
 
             <v-row>
-                <v-stage ref="stageEl" :config="stageSize" @mouseDown="handleStageMouseDown" style="background: #dfffff">
+                <v-col>
+                     <v-stage ref="stageEl" :config="stageSize" @mouseDown="handleStageMouseDown" style="background: #dfffff">
                     <v-layer ref="layerEl">         
                         <v-transformer ref="transformer" />
                     </v-layer>
-                </v-stage>    
+                </v-stage> 
+                </v-col>
+
+                <v-col>
+                    <PropertiesPanel :currentObject='selectedObj' :items='shapes'></PropertiesPanel>
+                </v-col>
+                  
             </v-row>
 
         </v-container>     
@@ -24,6 +31,7 @@ import Vue from 'vue'
 import Konva from 'konva'
 import axios from 'axios'
 import TopPanel from './TopPanel'
+import PropertiesPanel from './PropertiesPanel'
 import ShapeFactory from './primitives/ShapeFactory'
 
 export default {
@@ -36,7 +44,8 @@ export default {
         })
     },
     components: {
-        TopPanel
+        TopPanel,
+        PropertiesPanel
     },
     data() {
         return {
@@ -55,56 +64,24 @@ export default {
     },
     methods: {
         createComponent(e) {
-            console.log('triggered')
-            var ComponentClass = Vue.extend(ShapeFactory)
-            var rectangle = new ComponentClass().createRectangle()
-            rectangle.$mount()
-            this.$refs.layerEl.$el.appendChild(rectangle.$el)
-        },
-        setTreeItem(e) {
-             // clicked on stage - clear selection
-            if (e.target === e.target.getStage()) {
-                this.selectedObj = {}
-                return;
-            }
+            var factory = Vue.extend(ShapeFactory);
+            var shape = new factory().createShape(e)
+            this.shapes.push(shape)
+            var kShape = Vue.component(shape.type);
 
-            // clicked on transformer - do nothing
-            const clickedOnTransformer =
-            e.target.getParent().className === 'Transformer';
-            if (clickedOnTransformer) {
-              return;
-            }
-
-            // find clicked rect by its name
-            const name = e.target.name();
-            const rect = this.rectangles.find(r => r.name === name);
-            if (rect) {
-                this.selectedObj = rect;
-            } else {
-                const circ = this.circles.find(r => r.name === name);
-                if (circ) {
-                   this.selectedObj = circ;
-                }            
-            }
-        },
-        handleTransformEnd(e) {
-            // shape is transformed, let us save new attrs back to the node
-            // find element in our state
-            const rect = this.rectangles.find(r => r.name === this.selectedShapeName);
-            // update the state
-            rect.x = e.target.x();
-            rect.y = e.target.y();
-            rect.rotation = e.target.rotation();
-            rect.scaleX = e.target.scaleX();
-            rect.scaleY = e.target.scaleY();
-
-            // change fill
-            rect.fill = Konva.Util.getRandomColor();
+            var anchor = new kShape({
+                propsData: {
+                    config: shape,
+                    key: shape.id,
+                }
+            });
+            this.$refs.layerEl.getNode().add(anchor.getNode())
+            this.$refs.layerEl.getNode().draw()
         },
         handleStageMouseDown(e) {
             // clicked on stage - clear selection
             if (e.target === e.target.getStage()) {
-                this.selectedShapeName = '';
+                this.selectedObj = {};
                 this.updateTransformer();
                 return;
             }
@@ -118,21 +95,11 @@ export default {
 
             // find clicked rect by its name
             const name = e.target.name();
-            const rect = this.rectangles.find(r => r.name === name);
-            if (rect) {
-                this.selectedShapeName = name;
+            const shape = this.shapes.find(shape => shape.name === name);
+            if (shape) {
+                this.selectedObj = shape;
             } else {
-                const circ = this.circles.find(r => r.name === name);
-                if (circ) {
-                    this.selectedShapeName = name;
-                } else {
-                    const txt = this.labels.find(r => r.name === name);
-                    if (txt) {
-                        this.selectedShapeName = name;
-                    } else {
-                        this.selectedShapeName = '';
-                    }                    
-                }                
+                this.selectedObj = {};           
             }
             this.updateTransformer();
         },

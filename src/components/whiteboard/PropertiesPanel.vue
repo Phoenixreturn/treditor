@@ -1,27 +1,36 @@
 <template>
-    <div>
-      <v-treeview :items="{}"></v-treeview>
+    <div class="properties-tree">    
        <JsonEditor
         :options="{
             confirmText: 'confirm',
             cancelText: 'cancel',
         }"
-        :objData="{}" 
-        v-model="selectedObject"
+        :objData="currentObject" 
+        v-model="currentObject"
         @input="function() {}" >
     </JsonEditor>
+    <v-treeview :items="items"></v-treeview>
     </div>
 </template>
 
 <script>
 import Vue from 'vue'
-import JsonEditor from './treeview'
+import JsonEditor from '../treeview/JsonEditor'
 
 export default {
     name: 'PropertiesPanel',
-    data: function() {
-        return {
-            selectedObject: {}
+    props: {
+        currentObject: {
+            type: Object,
+            default: function () {
+                return { message: 'hello' }
+            }
+        },
+        items: {
+            type: Array,
+            default: function () {
+                return []
+            }
         }
     },
     components: {
@@ -29,3 +38,10 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.properties-tree {
+    border: 4px double black; /* Параметры границы */
+    padding: 10px; /* Поля вокруг текста */
+}
+</style>
