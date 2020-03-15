@@ -5,7 +5,7 @@ import App from './App.vue'
 import BootstrapVue from 'bootstrap-vue'
 import HelloWorld from './components/HelloWorld.vue'
 import Resizable from './components/Resizable.vue'
-import WhiteBoard from './components/WhiteBoard.vue'
+import WhiteBoard from './components/whiteboard/WhiteBoard.vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import vuetify from './plugins/vuetify';

@@ -34,7 +34,7 @@
           <template v-else>
             <span class="val">
               
-              <v-text-field v-if="item.type == 'color'" v-model="item.remark" v-mask="item.mask" hide-details class="ma-0 pa-0" solo>
+              <v-text-field v-if="item.type == 'color'" v-model="item.remark" hide-details class="ma-0 pa-0" solo>
                 <template v-slot:append>
                   <v-menu v-model="item.menu" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
                     <template v-slot:activator="{ on }">

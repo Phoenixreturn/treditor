@@ -1,6 +1,6 @@
 <template>
     <div class="polyLine">
-        <v-line v-for="item in lines" :key="item.id" :config="item"/>
+        <v-line v-for="item in lines" :key="item.id" :config="item"/>     
     </div>
 </template>
 
@@ -9,7 +9,7 @@
 import Vue from 'vue'
 
 export default {
-    name: "KonvaPolyLine",
+    name: "PolyLine",
     props: {
         points: {
             type: Array,
