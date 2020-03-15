@@ -17,7 +17,9 @@
                 </v-col>
 
                 <v-col>
-                    <PropertiesPanel :currentObject='selectedObj' :items='shapes'></PropertiesPanel>
+                    <PropertiesPanel :currentObject='selectedObj' 
+                                     :items='shapes'
+                                     @update:selectedObject="updateSelectedObject"></PropertiesPanel>
                 </v-col>
                   
             </v-row>
@@ -77,6 +79,10 @@ export default {
             });
             this.$refs.layerEl.getNode().add(anchor.getNode())
             this.$refs.layerEl.getNode().draw()
+        },
+        updateSelectedObject(obj) {
+            console.log('dsvsdf')
+            this.shapes[0].x = 150;
         },
         handleStageMouseDown(e) {
             // clicked on stage - clear selection

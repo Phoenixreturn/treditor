@@ -5,9 +5,8 @@
             confirmText: 'confirm',
             cancelText: 'cancel',
         }"
-        :objData="currentObject" 
-        v-model="currentObject"
-        @input="function() {}" >
+        :objData="selectedObject" 
+        v-model="selectedObject">
     </JsonEditor>
     <v-treeview :items="items"></v-treeview>
     </div>
@@ -15,7 +14,8 @@
 
 <script>
 import Vue from 'vue'
-import JsonEditor from '../treeview/JsonEditor'
+import JsonEditor from '../treeview'
+Vue.use(JsonEditor)
 
 export default {
     name: 'PropertiesPanel',
@@ -23,7 +23,7 @@ export default {
         currentObject: {
             type: Object,
             default: function () {
-                return { message: 'hello' }
+                return { }
             }
         },
         items: {
@@ -33,8 +33,16 @@ export default {
             }
         }
     },
-    components: {
-        JsonEditor
+    computed: {
+        selectedObject: {
+            get: function(){
+                return this.currentObject;
+            },
+            set: function(currentObject){
+                console.log('sert va;ue')
+                this.$emit('update:selectedObject', currentObject)
+            }   
+        },
     }
 }
 </script>

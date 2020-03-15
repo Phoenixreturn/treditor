@@ -50,7 +50,7 @@ export default {
           return;
         }
 
-        this.lastParsedData = newValue;
+        this.lastParsedData = this.jsonParse(JSON.stringify(newValue));
         this.$emit("input", this.makeJson(this.parsedData));
       },
       deep: true
