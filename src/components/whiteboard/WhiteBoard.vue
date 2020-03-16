@@ -9,17 +9,17 @@
 
             <v-row>
                 <v-col>
-                     <v-stage ref="stageEl" :config="stageSize" @mouseDown="handleStageMouseDown" style="background: #dfffff">
+                      
+                     <v-stage ref="stageEl" :config="stageSize" @mouseDown="handleStageMouseDown" @transformend="handleTransformEnd" style="background: #dfffff">
                     <v-layer ref="layerEl">         
-                        <v-transformer ref="transformer" />
+                        <v-transformer ref="transformer" />                     
                     </v-layer>
                 </v-stage> 
                 </v-col>
 
                 <v-col>
                     <PropertiesPanel :currentObject='selectedObj' 
-                                     :items='shapes'
-                                     @update:selectedObject="updateSelectedObject"></PropertiesPanel>
+                                     :items='shapes'></PropertiesPanel>
                 </v-col>
                   
             </v-row>
@@ -65,6 +65,16 @@ export default {
         }
     },
     methods: {
+        handleTransformEnd(e) {
+            if(this.selectedObj) {
+                this.selectedObj.x = e.target.attrs.x;
+                this.selectedObj.y = e.target.attrs.y;
+                this.selectedObj.rotation = e.target.attrs.rotation;
+                this.selectedObj.scaleX = e.target.attrs.scaleX;
+                this.selectedObj.scaleY = e.target.attrs.scaleY;
+                // rect.fill = Konva.Util.getRandomColor();
+            }         
+        },
         createComponent(e) {
             var factory = Vue.extend(ShapeFactory);
             var shape = new factory().createShape(e)
@@ -78,11 +88,11 @@ export default {
                 }
             });
             this.$refs.layerEl.getNode().add(anchor.getNode())
+            anchor.$parent = this.$refs.layerEl
+            anchor.getNode().on('transformend', this.handleTransformEnd)
+            
+            anchor.$mount()            
             this.$refs.layerEl.getNode().draw()
-        },
-        updateSelectedObject(obj) {
-            console.log('dsvsdf')
-            this.shapes[0].x = 150;
         },
         handleStageMouseDown(e) {
             // clicked on stage - clear selection
@@ -113,9 +123,8 @@ export default {
             // here we need to manually attach or detach Transformer node
             const transformerNode = this.$refs.transformer.getNode();
             const stage = transformerNode.getStage();
-            const { selectedShapeName } = this;
 
-            const selectedNode = stage.findOne('.' + selectedShapeName);
+            const selectedNode = stage.findOne('.' + this.selectedObj.name);
             // do nothing if selected node is already attached
             if (selectedNode === transformerNode.node()) {
                 return;

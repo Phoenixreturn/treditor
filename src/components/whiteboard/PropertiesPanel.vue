@@ -39,8 +39,13 @@ export default {
                 return this.currentObject;
             },
             set: function(currentObject){
-                console.log('sert va;ue')
-                this.$emit('update:selectedObject', currentObject)
+                if (this.currentObject.id === currentObject.id) {
+                    for(var propertyName in currentObject) {
+                        if (this.currentObject[propertyName] !== currentObject[propertyName]) {
+                            this.currentObject[propertyName] = currentObject[propertyName]
+                        }
+                    }
+                }
             }   
         },
     }
