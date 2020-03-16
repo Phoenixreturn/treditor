@@ -6,7 +6,7 @@ class TextLabel extends Shape {
         this.text = text
         this.fontSize = fontSize
     }
-    type = 'vLabel'
+    type = 'vText'
 }
 
 export default TextLabel

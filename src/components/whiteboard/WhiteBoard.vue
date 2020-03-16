@@ -10,11 +10,11 @@
             <v-row>
                 <v-col>
                       
-                     <v-stage ref="stageEl" :config="stageSize" @mouseDown="handleStageMouseDown" @transformend="handleTransformEnd" style="background: #dfffff">
-                    <v-layer ref="layerEl">         
-                        <v-transformer ref="transformer" />                     
-                    </v-layer>
-                </v-stage> 
+                    <v-stage ref="stageEl" :config="stageSize" @mouseDown="handleStageMouseDown" @transformend="handleTransformEnd" style="background: #dfffff">
+                        <v-layer ref="layerEl">         
+                            <v-transformer ref="transformer" />                     
+                        </v-layer>
+                    </v-stage> 
                 </v-col>
 
                 <v-col>
@@ -38,13 +38,13 @@ import ShapeFactory from './primitives/ShapeFactory'
 
 export default {
     name: 'WhiteBoard',
-    created: function() {
-        axios.get('http://192.168.0.103:8080/springtest/primitives').then(function(response) {
-        }.bind(this))
-        .catch(e => {
-            this.errors.push(e);
-        })
-    },
+    // created: function() {
+    //     axios.get('http://192.168.0.103:8080/springtest/primitives').then(function(response) {
+    //     }.bind(this))
+    //     .catch(e => {
+    //         this.errors.push(e);
+    //     })
+    // },
     components: {
         TopPanel,
         PropertiesPanel
@@ -57,12 +57,37 @@ export default {
             suckerArea: [],
             isSucking: false,
             shapes: [],
-            errors: [],      
+            errors: [],   
+            gridSize: 20,   
             stageSize: {
                 width: 500,
                 height: 500
             }
         }
+    },
+    mounted : function() {
+        var gridLayer = new Konva.Layer();
+        var padding = this.gridSize;
+        console.log(this.stageSize.width, padding, this.stageSize.width / padding);
+        for (var i = 0; i < this.stageSize.width / padding; i++) {
+            gridLayer.add(new Konva.Line({
+                points: [Math.round(i * padding) + 0.5, 0, Math.round(i * padding) + 0.5, this.stageSize.height],
+                stroke: '#ddd',
+                strokeWidth: 2,
+            }));
+        }
+
+        gridLayer.add(new Konva.Line({points: [0,0,10,10]}));
+        for (var j = 0; j < this.stageSize.height / padding; j++) {
+            gridLayer.add(new Konva.Line({
+                points: [0, Math.round(j * padding), this.stageSize.width, Math.round(j * padding)],
+                stroke: '#ddd',
+                strokeWidth: 2,
+            }));
+        }
+        this.$refs.stageEl.getNode().add(gridLayer)
+        gridLayer.moveToBottom()
+        gridLayer.draw()
     },
     methods: {
         handleTransformEnd(e) {
@@ -90,6 +115,13 @@ export default {
             this.$refs.layerEl.getNode().add(anchor.getNode())
             anchor.$parent = this.$refs.layerEl
             anchor.getNode().on('transformend', this.handleTransformEnd)
+            anchor.getNode().on('dragend', (e) => {
+                anchor.getNode().position({
+                    x: Math.round(anchor.getNode().x() / this.gridSize) * this.gridSize,
+                    y: Math.round(anchor.getNode().y() / this.gridSize) * this.gridSize
+                });
+                this.$refs.stageEl.getNode().batchDraw();
+            });
             
             anchor.$mount()            
             this.$refs.layerEl.getNode().draw()

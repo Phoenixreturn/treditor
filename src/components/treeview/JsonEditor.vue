@@ -42,7 +42,8 @@ export default {
     objData: {
       handler(newValue, oldValue) {
         this.parsedData = this.jsonParse(this.objData);
-      }
+      },
+      deep: true
     },
     parsedData: {
       handler(newValue, oldValue) {
