@@ -92,13 +92,18 @@ export default {
     methods: {
         handleTransformEnd(e) {
             if(this.selectedObj) {
-                this.selectedObj.x = e.target.attrs.x;
-                this.selectedObj.y = e.target.attrs.y;
-                this.selectedObj.rotation = e.target.attrs.rotation;
-                this.selectedObj.scaleX = e.target.attrs.scaleX;
-                this.selectedObj.scaleY = e.target.attrs.scaleY;
+                this.selectedObj.x = this.getGridSize(e.target.attrs.x);
+                this.selectedObj.y = this.getGridSize(e.target.attrs.y);
+                this.selectedObj.height = this.getGridSize(e.target.attrs.height);
+                this.selectedObj.width = this.getGridSize(e.target.attrs.width);
+                this.selectedObj.rotation = this.getGridSize(e.target.attrs.rotation);
+                // this.selectedObj.scaleX = this.getGridSize(e.target.attrs.scaleX);
+                // this.selectedObj.scaleY = this.getGridSize(e.target.attrs.scaleY);
                 // rect.fill = Konva.Util.getRandomColor();
             }         
+        },
+        getGridSize(x) {
+            return Math.round(x / this.gridSize) * this.gridSize
         },
         createComponent(e) {
             var factory = Vue.extend(ShapeFactory);
@@ -117,8 +122,8 @@ export default {
             anchor.getNode().on('transformend', this.handleTransformEnd)
             anchor.getNode().on('dragend', (e) => {
                 anchor.getNode().position({
-                    x: Math.round(anchor.getNode().x() / this.gridSize) * this.gridSize,
-                    y: Math.round(anchor.getNode().y() / this.gridSize) * this.gridSize
+                    x: this.getGridSize(anchor.getNode().x()),
+                    y: this.getGridSize(anchor.getNode().y()),
                 });
                 this.$refs.stageEl.getNode().batchDraw();
             });
