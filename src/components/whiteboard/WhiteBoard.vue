@@ -1,20 +1,41 @@
 <template>
     <div className="whiteboard">
         <h1>Whiteboard</h1>
-        <v-container>
+        <v-container >
 
             <v-row align="center" justify="center">
                 <TopPanel @create='createComponent'></TopPanel>
             </v-row>
 
             <v-row>
-                <v-col>
+                <v-col @contextmenu.capture.prevent>
+                    <v-menu
+                        v-model="showMenu"
+                        absolute
+                        offset-y
+                        style="max-width: 600px"
+                    >
+                        <template v-slot:activator="{ on }">                           
+                            <v-stage ref="stageEl" :config="stageSize" @mouseDown="handleStageMouseDown" @transformend="handleTransformEnd" 
+                                @click='customFunct($event, on)' style="background: #dfffff">
+                                <v-layer ref="layerEl">         
+                                    <v-transformer ref="transformer" />                     
+                                </v-layer>
+                            </v-stage> 
+                        </template>
+  
+                    <v-list>
+                    <v-list-item
+                        v-for="(item, index) in items"
+                        :key="index">
+                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                    </v-list-item>
+                    </v-list>
+                  
+
+                    </v-menu>
                       
-                    <v-stage ref="stageEl" :config="stageSize" @mouseDown="handleStageMouseDown" @transformend="handleTransformEnd" style="background: #dfffff">
-                        <v-layer ref="layerEl">         
-                            <v-transformer ref="transformer" />                     
-                        </v-layer>
-                    </v-stage> 
+                   
                 </v-col>
 
                 <v-col>
@@ -57,7 +78,12 @@ export default {
             suckerArea: [],
             isSucking: false,
             shapes: [],
-            errors: [],   
+            errors: [],
+            showMenu: false,
+            items: [
+                { title: 'Start to Draw Line' },
+                { title: 'End to Draw Line'}
+            ],
             gridSize: 20,   
             stageSize: {
                 width: 500,
@@ -88,8 +114,12 @@ export default {
         this.$refs.stageEl.getNode().add(gridLayer)
         gridLayer.moveToBottom()
         gridLayer.draw()
+
     },
     methods: {
+        customFunct(e, on) {
+            on['click'](e.evt);
+        },
         handleTransformEnd(e) {
             if(this.selectedObj) {
                 this.selectedObj.x = this.getGridSize(e.target.attrs.x);

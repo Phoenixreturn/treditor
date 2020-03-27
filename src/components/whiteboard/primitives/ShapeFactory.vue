@@ -2,6 +2,7 @@
 import Circle from './Circle'
 import Rectangle from './Rectangle'
 import TextLabel from './TextLabel'
+import Path from './Path'
 
 export default {
     name: 'ShapeFactory',
@@ -14,6 +15,8 @@ export default {
                     return this.createRectangle();
                 case 'textLabel':
                     return this.createTextLabel();
+                case 'path':
+                    return this.createPath();
                 default:
                     return this.createRectangle();
             }
@@ -35,6 +38,11 @@ export default {
             var circle = new Circle()
 
             return circle
+        },
+        createPath() {
+            var path = new Path()
+
+            return path
         }
     }
 }

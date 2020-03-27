@@ -13,6 +13,9 @@
             <b-button variant="secondary" @click="onClick('polyLine')">
                 PolyLine
             </b-button>
+            <b-button variant="secondary" @click="onClick('path')">
+                Path
+            </b-button>
         </b-button-group>
     </div>
 </template>
