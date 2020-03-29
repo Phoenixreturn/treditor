@@ -1,11 +1,11 @@
 <template>
-    <v-container fluid class="ma-0">
-        <v-row align="center" justify="center">
+    <v-container fluid class="ma-0 pa-0" fill-height>
+        <v-row align="center" justify="center" class="ma-0 pa-0">
                 <TopPanel @create="createComponent"></TopPanel>
         </v-row>
 
-        <v-row>
-            <v-col    v-if='items1.length > 0'>   <v-card>
+        <v-row class="ma-0 pa-0">
+            <v-col  class="ma-0 pa-0"  v-if='items1.length > 0'>   <v-card>
                
       <v-tabs
         v-model="tab"
@@ -37,7 +37,7 @@
       </v-tabs-items>
           
     </v-card></v-col>
-            <v-col @contextmenu.capture.prevent fluid>
+            <v-col @contextmenu.capture.prevent  class="ma-0 pa-0" >
                 <v-menu v-model="showMenu" absolute offset-y style="max-width: 600px">
                     <template v-slot:activator="{ on }">
                         <v-stage
@@ -70,7 +70,7 @@
       </draggable>
         </v-col>
 
-        <v-col>
+        <v-col  class="ma-0 pa-0" >
        <draggable v-model="items2" :move="onMove" :options='{group: "people"}'>
         <transition-group>
               <component v-for="el in items2" v-bind:is='el.type'  v-bind="el.objProps" v-bind:key="el.id"></component>
