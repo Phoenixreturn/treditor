@@ -22,14 +22,14 @@ export default {
     props: {
         currentObject: {
             type: Object,
-            default: function () {
-                return { }
+            default: function() {
+                return {}
             }
         },
         items: {
             type: Array,
-            default: function () {
-                return []
+            default: function() {
+                return [];
             }
         }
     },

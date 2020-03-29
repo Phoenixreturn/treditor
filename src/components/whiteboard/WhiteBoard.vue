@@ -1,47 +1,87 @@
 <template>
-  <div class="whiteboard">
-    <h1>Whiteboard</h1>
-    <v-container>
-      <v-row align="center" justify="center">
-        <TopPanel @create="createComponent"></TopPanel>
-      </v-row>
+    <v-container fluid class="ma-0">
+        <v-row align="center" justify="center">
+                <TopPanel @create="createComponent"></TopPanel>
+        </v-row>
 
-      <v-row>
-        <v-col @contextmenu.capture.prevent>
-          <v-menu v-model="showMenu" absolute offset-y style="max-width: 600px">
-            <template v-slot:activator="{ on }">
-              <v-stage
-                ref="stageEl"
-                :config="stageSize"
-                @mouseDown="handleStageMouseDown"
-                @transformend="handleTransformEnd"
-                @click="customFunct($event, on)"
-                style="background: #dfffff"
-              >
-                <v-layer ref="layerEl">
-                  <v-transformer ref="transformer" />
-                </v-layer>
-              </v-stage>
-            </template>
+        <v-row>
+            <v-col    v-if='items1.length > 0'>   <v-card>
+               
+      <v-tabs
+        v-model="tab"
+        background-color="primary"
+        dark
+     
+      >
+        <v-tab
+          v-for="item in items1"
+          :key="item.tab"
+        >
+          {{ item.tab }}
+        </v-tab>
+      </v-tabs>
+  
+      <v-tabs-items v-model="tab">
+   
+     
+        <v-tab-item
+          v-for="item in items1"
+          :key="item.tab"
+        >    <draggable v-model="items1" :move="onMove" :options='{group: "people"}'> 
+        <transition-group> 
+           <component  v-bind:is="item.type"  :key="item.tab" :objProps="item.objProps"></component>
+   </transition-group>
+      </draggable>
+        </v-tab-item>
+     
+      </v-tabs-items>
+          
+    </v-card></v-col>
+            <v-col @contextmenu.capture.prevent fluid>
+                <v-menu v-model="showMenu" absolute offset-y style="max-width: 600px">
+                    <template v-slot:activator="{ on }">
+                        <v-stage
+                            ref="stageEl"
+                            :config="stageSize"
+                            @mouseDown="handleStageMouseDown"
+                            @transformend="handleTransformEnd"
+                            @click="customFunct($event, on)"
+                            style="background: #dfffff"
+                        >
+                            <v-layer ref="layerEl">
+                                <v-transformer ref="transformer" />
+                            </v-layer>
+                        </v-stage>
+                    </template>
 
-            <v-list>
-              <v-list-item
-                v-for="(item, index) in items"
-                :key="index"
-                @click="handleListClick(item.title)()"
-              >
-                <v-list-item-title>{{ item.title }}</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
+                    <v-list>
+                        <v-list-item
+                            v-for="(item, index) in items"
+                            :key="index"
+                            @click="handleListClick(item.title)()">
+                            <v-list-item-title>{{ item.title }}</v-list-item-title>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
+             <draggable v-model="items1" :move="onMove" :options='{group: "people"}'>
+        <transition-group>
+              <component v-for="el in items1" v-bind:is='el.type'  v-bind="el.objProps" v-bind:key="el.id"></component>
+           </transition-group>
+      </draggable>
         </v-col>
 
         <v-col>
-          <PropertiesPanel :currentObject="selectedObj" :items="shapes"></PropertiesPanel>
+       <draggable v-model="items2" :move="onMove" :options='{group: "people"}'>
+        <transition-group>
+              <component v-for="el in items2" v-bind:is='el.type'  v-bind="el.objProps" v-bind:key="el.id"></component>
+           </transition-group>
+      </draggable>
+                
+                
         </v-col>
       </v-row>
     </v-container>
-  </div>
+  
 </template>
 
 <script>
@@ -49,8 +89,10 @@ import Vue from "vue";
 import Konva from "konva";
 import axios from "axios";
 import TopPanel from "./TopPanel";
+import StubTab from "./StubTab";
 import PropertiesPanel from "./PropertiesPanel";
 import ShapeFactory from "./primitives/ShapeFactory";
+import draggable from 'vuedraggable'
 
 export default {
   name: "WhiteBoard",
@@ -63,7 +105,9 @@ export default {
   // },
   components: {
     TopPanel,
-    PropertiesPanel
+    PropertiesPanel,
+    draggable,
+    StubTab
   },
   data() {
     return {
@@ -74,16 +118,50 @@ export default {
       isSucking: false,
       shapes: [],
       errors: [],
+      editable: true,
       showMenu: false,
+      propertiesType: 'PropertiesPanel',
       items: [{ title: "Start to Draw Line" }, { title: "End to Draw Line" }],
-      gridSize: 20,
+      gridSize: 40,
       stageSize: {
         width: 500,
         height: 500
-      }
+      },
+       tab: null,
+      items1: [
+        { tab: 'One', id: 'One', objProps: { content: 'Tab 1 Content' }, type: 'StubTab' },
+        { tab: 'Two', id: 'Two', objProps: { content: 'Tab 2 Content' }, type: 'StubTab' },
+        { tab: 'Three', id: 'Three', objProps: { content: 'Tab 3 Content' }, type: 'StubTab' },
+      ],
+      items2: [
+            { tab: 'Four', id: 'Four', objProps: {}, type: 'PropertiesPanel' },
+      ]
     };
   },
+  computed: {
+    propTab() {
+      return { currentObject: this.selectedObj, items: this.shapes };
+    },
+     dragOptions() {
+      return {
+        animation: 0,
+        group: "description",
+        disabled: !this.editable,
+        ghostClass: "ghost"
+      };
+    },
+  },
+  watch: {
+    selectedObj: function(val) {
+      this.selectedObj = val
+      this.items2[0].objProps = this.propTab;
+    }
+  },
+  created: function() {
+    this.items2[0].objProps = this.propTab;
+  },
   mounted: function() {
+      console.log(this.$vuetify.breakpoint)
     var gridLayer = new Konva.Layer();
     var padding = this.gridSize;
     console.log(this.stageSize.width, padding, this.stageSize.width / padding);
@@ -122,6 +200,13 @@ export default {
     gridLayer.draw();
   },
   methods: {
+     onMove({ relatedContext, draggedContext }) {
+      const relatedElement = relatedContext.element;
+      const draggedElement = draggedContext.element;
+      return (
+        (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
+      );
+    },
     customFunct(e, on) {
       on["click"](e.evt);
     },
