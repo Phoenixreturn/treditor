@@ -40,12 +40,8 @@
   <!-- Sizes your content based upon application components -->
   <v-content>
 
-    <!-- Provides the application the proper gutter -->
-    <v-container fluid>
-      <router-view></router-view>
-    </v-container>
+     <router-view></router-view>
   </v-content>
-
   <v-footer app>
   </v-footer>
 </v-app>

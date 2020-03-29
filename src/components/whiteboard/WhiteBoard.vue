@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid class="ma-0 pa-0" fill-height>
+    <v-container class="ma-0 pa-0">
         <v-row align="center" justify="center" class="ma-0 pa-0">
                 <TopPanel @create="createComponent"></TopPanel>
         </v-row>
