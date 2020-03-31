@@ -27,7 +27,7 @@
         <v-tab-item
           v-for="item in items1"
           :key="item.tab"
-        >    <draggable v-model="items1" :move="onMove" :options='{group: "people"}'> 
+        >  <draggable v-model="items1" v-bind="{ghostClass: 'movClass'}" @start="showCurtain" @move="onMove" :options='{group: "people"}'>
         <transition-group> 
            <component  v-bind:is="item.type"  :key="item.tab" :objProps="item.objProps"></component>
    </transition-group>
@@ -63,15 +63,10 @@
                         </v-list-item>
                     </v-list>
                 </v-menu>
-             <draggable v-model="items1" :move="onMove" :options='{group: "people"}'>
-        <transition-group>
-              <component v-for="el in items1" v-bind:is='el.type'  v-bind="el.objProps" v-bind:key="el.id"></component>
-           </transition-group>
-      </draggable>
         </v-col>
 
         <v-col  class="ma-0 pa-0" >
-       <draggable v-model="items2" :move="onMove" :options='{group: "people"}'>
+       <draggable v-model="items2" v-bind="{ghostClass: 'movClass'}" @start="showCurtain" @end="displayValue='none'" :move="onMove" :options='{group: "people"}'>
         <transition-group>
               <component v-for="el in items2" v-bind:is='el.type'  v-bind="el.objProps" v-bind:key="el.id"></component>
            </transition-group>
@@ -80,6 +75,11 @@
                 
         </v-col>
       </v-row>
+      <div class="blackout" v-bind:style="{ display: displayValue, opacity: opacityValue }"> 
+             <draggable v-model="items1" :options='{group: "people"}'>  
+        <v-btn @click="changeCurtain">Or tempora or mores</v-btn>
+           </draggable>
+      </div>
     </v-container>
   
 </template>
@@ -118,6 +118,8 @@ export default {
       isSucking: false,
       shapes: [],
       errors: [],
+      displayValue: 'none',
+      opacityValue: '60%',
       editable: true,
       showMenu: false,
       propertiesType: 'PropertiesPanel',
@@ -200,6 +202,12 @@ export default {
     gridLayer.draw();
   },
   methods: {
+    changeCurtain() {
+      this.displayValue = 'none'
+    },
+    showCurtain() {
+      this.displayValue = 'block'
+    },
      onMove({ relatedContext, draggedContext }) {
       const relatedElement = relatedContext.element;
       const draggedElement = draggedContext.element;
@@ -349,3 +357,18 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.movClass {
+  z-index: 1000;
+}
+.blackout {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  height: 100vh;
+  background-color: black;
+  width: 100vw;
+  z-index: 100;
+}
+</style>
