@@ -1,11 +1,11 @@
 <template>
-    <v-container class="ma-0 pa-0">
-        <v-row align="center" justify="center" class="ma-0 pa-0">
+    <v-container fill-height fluid class="ma-0 pa-0">
+        <v-row align="center" class="ma-0 pa-0 ttttttt firstRow">
                 <TopPanel @create="createComponent"></TopPanel>
         </v-row>
 
-        <v-row class="ma-0 pa-0">
-            <v-col  class="ma-0 pa-0"  v-if='items1.length > 0'>   <v-card>
+        <v-row class="ma-0 pa-0 ttttttt" style="height:92%">
+            <v-col  class="ma-0 pa-0"  v-if='items1.length > 0' :cols="2">   <v-card>
                
       <v-tabs
         v-model="tab"
@@ -37,8 +37,8 @@
       </v-tabs-items>
           
     </v-card></v-col>
-            <v-col @contextmenu.capture.prevent  class="ma-0 pa-0" >
-                <v-menu v-model="showMenu" absolute offset-y style="max-width: 600px">
+            <v-col @contextmenu.capture.prevent  class="ma-0 pa-0"  :cols="stageColSize"  >
+                <v-menu v-model="showMenu" absolute offset-y>
                     <template v-slot:activator="{ on }">
                         <v-stage
                             ref="stageEl"
@@ -46,7 +46,7 @@
                             @mouseDown="handleStageMouseDown"
                             @transformend="handleTransformEnd"
                             @click="customFunct($event, on)"
-                            style="background: #dfffff"
+                            style="background: #dfffff; height:100%"
                         >
                             <v-layer ref="layerEl">
                                 <v-transformer ref="transformer" />
@@ -63,15 +63,8 @@
                         </v-list-item>
                     </v-list>
                 </v-menu>
-                    <draggable v-model="items1" v-bind="{ghostClass: 'ghostClass'}" @start="showCurtain" @end="displayValue='none'" :move="checkMove" 
-                    :options='{group: "people"}' tag="ul">
-        <transition-group>
-              <component v-for="el in items1" v-bind:is='el.type'  v-bind="el.objProps" v-bind:key="el.id"></component>
-           </transition-group>
-      </draggable>
         </v-col>
-
-        <v-col  class="ma-0 pa-0" >
+        <v-col  class="ma-0 pa-0"  :cols="2" v-show="items2.length > 0">
        <draggable v-model="items2" v-bind="{ghostClass: 'movClass'}" @start="showCurtain" @end="displayValue='none'" :move="checkMove"  
         :options='{group: "people"}'  >
         <transition-group>
@@ -82,8 +75,9 @@
                 
         </v-col>
       </v-row>
-      <div class="blackout" v-bind:style="{ display: displayValue, opacity: opacityValue }" > 
+      <div class="blackout" v-bind:style="{ display: displayValue, opacity: opacityValue }"  > 
           <draggable v-model="items1" :options='{group: "people"}' :move="checkMove"  style="margin: 10%"> 
+            <template v-slot:header><h1>Header #############</h1></template>
            <v-btn id="leftBtn" icon width="200" height="200">
           <img src="../../assets/left_arrow.svg" alt="Left Arrow" height="200" width="200" style="transform:rotate(180deg);">
             </v-btn>
@@ -94,6 +88,7 @@
            
           
       </div>
+   
     </v-container>
   
 </template>
@@ -155,6 +150,18 @@ export default {
     };
   },
   computed: {
+    stageColSize() {
+      var col = 8;
+      if (this.items1.length == 0) {
+        col += 2;
+      }
+
+      if (this.items2.length == 0) {
+        col +=2;
+      }
+
+      return col;
+    },
     propTab() {
       return { currentObject: this.selectedObj, items: this.shapes };
     },
@@ -176,8 +183,14 @@ export default {
   created: function() {
     this.items2[0].objProps = this.propTab;
   },
-  mounted: function() {
-      console.log(this.$vuetify.breakpoint)
+  mounted: function() { 
+    this.$nextTick(function () {
+    const height = this.$refs.stageEl.$el.clientHeight;
+      const width = this.$refs.stageEl.$el.clientWidth;
+      this.stageSize.width = width;
+      this.stageSize.height = height;
+      this.$refs.stageEl.getNode().width(this.stageSize.width);
+      this.$refs.stageEl.getNode().height(this.stageSize.height );
     var gridLayer = new Konva.Layer();
     var padding = this.gridSize;
     console.log(this.stageSize.width, padding, this.stageSize.width / padding);
@@ -214,6 +227,8 @@ export default {
     this.$refs.stageEl.getNode().add(gridLayer);
     gridLayer.moveToBottom();
     gridLayer.draw();
+  })   
+     
   },
   methods: {
     changeCurtain() {
@@ -383,5 +398,14 @@ export default {
   z-index: 100;
   justify-content: space-between;
   align-items: center;
+}
+.ttttttt {
+    align-self: stretch;
+    width:100%;
+}
+
+.firstRow {
+  height: 8%;
+  background-color: lightsteelblue;
 }
 </style>

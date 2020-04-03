@@ -4,11 +4,11 @@
       <template v-slot:prepend>
           <v-list-item two-line>
             <v-list-item-avatar>
-              <img src="https://randomuser.me/api/portraits/women/81.jpg">
+              <img src="./assets/avatar.jpg">
             </v-list-item-avatar>
   
             <v-list-item-content>
-              <v-list-item-title>Jane Smith</v-list-item-title>
+              <v-list-item-title>Robert Gallyamov</v-list-item-title>
               <v-list-item-subtitle>Logged In</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -35,6 +35,25 @@
   </v-navigation-drawer>
 
   <v-app-bar :color="color" app flat>
+     <v-menu offset-y>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            color="secondary"
+            dark
+            v-on="on"
+          >
+            File
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in items"
+            :key="index"
+          >
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
   </v-app-bar>
 
   <!-- Sizes your content based upon application components -->

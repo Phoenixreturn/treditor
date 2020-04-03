@@ -1,5 +1,5 @@
 <template>
-    <div> Stub Tab {{ content }}</div>
+    <div style="height: 100%"> Stub Tab {{ content }}</div>
 </template>
 
 <script>
