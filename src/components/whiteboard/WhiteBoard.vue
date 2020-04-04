@@ -76,8 +76,7 @@
         </v-col>
       </v-row>
       <div class="blackout" v-bind:style="{ display: displayValue, opacity: opacityValue }"  > 
-          <draggable v-model="items1" :options='{group: "people"}' :move="checkMove"  style="margin: 10%"> 
-            <template v-slot:header><h1>Header #############</h1></template>
+          <draggable v-model="items1" :options='{group: "people"}' :move="checkMove"  style="margin: 10%">
            <v-btn id="leftBtn" icon width="200" height="200">
           <img src="../../assets/left_arrow.svg" alt="Left Arrow" height="200" width="200" style="transform:rotate(180deg);">
             </v-btn>
@@ -123,6 +122,7 @@ export default {
       selectedObj: {},
       color: "#59c7f9",
       suckerCanvas: null,
+      gridLayer: null,
       suckerArea: [],
       isSucking: false,
       shapes: [],
@@ -183,19 +183,31 @@ export default {
   created: function() {
     this.items2[0].objProps = this.propTab;
   },
-  mounted: function() { 
-    this.$nextTick(function () {
+  mounted: function() {
+       this.$nextTick(function() {
+      window.addEventListener('resize', () => { 
+            const height = this.$refs.stageEl.$el.clientHeight;
+      const width = this.$refs.stageEl.$el.clientWidth;
+      this.stageSize.width = width;
+      this.stageSize.height = height;
+          this.gridLayer.draw();
+        console.log('############### Window resize event #######################')
+      });
+    })
+  },
+  updated: function() {
+this.$nextTick(function () {
     const height = this.$refs.stageEl.$el.clientHeight;
       const width = this.$refs.stageEl.$el.clientWidth;
       this.stageSize.width = width;
       this.stageSize.height = height;
       this.$refs.stageEl.getNode().width(this.stageSize.width);
       this.$refs.stageEl.getNode().height(this.stageSize.height );
-    var gridLayer = new Konva.Layer();
+    this.gridLayer = new Konva.Layer();
     var padding = this.gridSize;
     console.log(this.stageSize.width, padding, this.stageSize.width / padding);
     for (var i = 0; i < this.stageSize.width / padding; i++) {
-      gridLayer.add(
+      this.gridLayer.add(
         new Konva.Line({
           points: [
             Math.round(i * padding) + 0.5,
@@ -209,9 +221,9 @@ export default {
       );
     }
 
-    gridLayer.add(new Konva.Line({ points: [0, 0, 10, 10] }));
+    this.gridLayer.add(new Konva.Line({ points: [0, 0, 10, 10] }));
     for (var j = 0; j < this.stageSize.height / padding; j++) {
-      gridLayer.add(
+      this.gridLayer.add(
         new Konva.Line({
           points: [
             0,
@@ -224,11 +236,10 @@ export default {
         })
       );
     }
-    this.$refs.stageEl.getNode().add(gridLayer);
-    gridLayer.moveToBottom();
-    gridLayer.draw();
+    this.$refs.stageEl.getNode().add(this.gridLayer);
+    this.gridLayer.moveToBottom();
+    this.gridLayer.draw();
   })   
-     
   },
   methods: {
     changeCurtain() {
