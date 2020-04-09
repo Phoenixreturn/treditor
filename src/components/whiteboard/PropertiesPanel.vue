@@ -1,5 +1,5 @@
 <template>
-    <div class="properties-tree">    
+    <div class="properties-tree" height='100%'>    
        <JsonEditor
         :options="{
             confirmText: 'confirm',

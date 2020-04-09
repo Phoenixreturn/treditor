@@ -1,31 +1,23 @@
 <template>
   <v-btn-toggle mandatory>
     <v-btn class="buttons1" @click="onClick('rectangle')">
-      <v-icon>mdi-format-align-left</v-icon>
+      <v-icon>$vuetify.icons.rectangle</v-icon>
     </v-btn>
     <v-btn class="buttons1" @click="onClick('circle')">
-      <v-icon>mdi-format-align-center</v-icon>
+      <v-icon>$vuetify.icons.circle</v-icon>
     </v-btn>
     <v-btn class="buttons1" @click="onClick('textLabel')">
-      <v-icon>mdi-format-align-right</v-icon>
+      <v-icon>$vuetify.icons.label</v-icon>
     </v-btn>
     <v-btn class="buttons1" @click="onClick('polyLine')">
-      <v-icon>mdi-format-align-justify</v-icon>
-    </v-btn>
-    <v-btn class="buttons1" @click="onClick('path')">
-      <CadIcon></CadIcon>
+      <v-icon>$vuetify.icons.line</v-icon>
     </v-btn>
   </v-btn-toggle>
 </template>
 
 <script>
-import CadIcon from '../icons/CadIcon'
-
 export default {
   name: "TopPanel",
-  components: {
-    CadIcon
-  },
   methods: {
     onClick(e) {
       this.$emit("create", e)

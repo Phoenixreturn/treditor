@@ -98,7 +98,6 @@ import StubTab from "./StubTab"
 import PropertiesPanel from "./PropertiesPanel"
 import ShapeFactory from "./primitives/ShapeFactory"
 import draggable from "vuedraggable"
-import CadIcon from "../icons/CadIcon"
 
 export default {
   name: "WhiteBoard",
@@ -113,8 +112,7 @@ export default {
     TopPanel,
     PropertiesPanel,
     draggable,
-    StubTab,
-    CadIcon
+    StubTab
   },
   data() {
     return {
