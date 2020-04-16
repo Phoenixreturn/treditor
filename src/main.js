@@ -6,6 +6,7 @@ import WhiteBoard from './components/whiteboard/WhiteBoard.vue'
 import vuetify from './plugins/vuetify';
 import {store} from './store';
 
+import './assets/css/app.css'
 Vue.use(VueRouter)
 Vue.use(VueKonva)
 
@@ -26,7 +27,10 @@ Vue.config.productionTip = false
 new Vue({
   router,
   store,
+  el: '#app',
   vuetify, 
-  render: h => h(App)
-}).$mount('#app')
+  render: function(h) {
+    return h(App)
+  }
+})
 

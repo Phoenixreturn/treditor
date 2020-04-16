@@ -1,7 +1,7 @@
 <template>
   <v-container fill-height fluid class="ma-0 pa-0">
     <v-row align="center" class="ma-0 pa-0 ttttttt firstRow">
-      <TopPanel @create="createComponent"></TopPanel>
+      <TopPanel robertCustom="hello there! #####################" @create="createComponent"></TopPanel>
     </v-row>
     <v-row class="ma-0 pa-0 ttttttt" style="height:92%">
       <v-col class="ma-0 pa-0" v-if="items1.length > 0" :cols="2">
@@ -40,10 +40,8 @@
             >
               <v-layer ref="layerEl">
                 <v-transformer ref="transformer" />
-             
               </v-layer>
             </v-stage>
-              
           </template>
 
           <v-list>
@@ -68,22 +66,16 @@
         </draggable>
       </v-col>
     </v-row>
-  
+
     <div class="blackout" v-bind:style="{ display: displayValue, opacity: opacityValue }">
       <draggable v-model="items1" :options="{group: 'people'}" :move="checkMove" style="margin: 10%">
         <v-btn id="leftBtn" icon width="200" height="200">
-          <img
-            src="../../assets/left_arrow.svg"
-            alt="Left Arrow"
-            height="200"
-            width="200"
-            style="transform:rotate(180deg);"
-          />
+          <LeftArrow style="width:200px;height:200px;transform:rotate(180deg)"></LeftArrow>
         </v-btn>
       </draggable>
 
       <v-btn id="rightBtn" style="margin: 10%" icon width="200" height="200">
-        <img src="../../assets/right_arrow.svg" alt="Right Arrow" height="200" width="200" />
+        <RightArrow style="width:200px;height:200px"></RightArrow>
       </v-btn>
     </div>
   </v-container>
@@ -98,6 +90,8 @@ import StubTab from "./StubTab"
 import PropertiesPanel from "./PropertiesPanel"
 import ShapeFactory from "./primitives/ShapeFactory"
 import draggable from "vuedraggable"
+import LeftArrow from "../../assets/left_arrow.svg"
+import RightArrow from "../../assets/right_arrow.svg"
 
 export default {
   name: "WhiteBoard",
@@ -112,7 +106,9 @@ export default {
     TopPanel,
     PropertiesPanel,
     draggable,
-    StubTab
+    StubTab,
+    LeftArrow,
+    RightArrow
   },
   data() {
     return {
@@ -215,6 +211,7 @@ export default {
   },
   created: function() {
     this.items2[0].objProps = this.propTab
+    console.log(this.$attrs)
   },
   mounted: function() {
     this.$nextTick(function() {
