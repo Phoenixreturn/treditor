@@ -22,9 +22,6 @@ export default {
     onClick(e) {
       this.$emit("create", e)
     }
-  },
-  created: function() {
-    console.log(this.$attrs)
   }
 }
 </script>

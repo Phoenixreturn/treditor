@@ -1,7 +1,7 @@
 <template>
   <v-container fill-height fluid class="ma-0 pa-0">
     <v-row align="center" class="ma-0 pa-0 ttttttt firstRow">
-      <TopPanel robertCustom="hello there! #####################" @create="createComponent"></TopPanel>
+      <TopPanel @create="createComponent"></TopPanel>
     </v-row>
     <v-row class="ma-0 pa-0 ttttttt" style="height:92%">
       <v-col class="ma-0 pa-0" v-if="items1.length > 0" :cols="2">

@@ -14,8 +14,10 @@
       :rows="rows"
       :filter="filterValue"
       :page="page"
+      selectable
       @filter-change="filterChanged"
       @page-change="pageChanged"
+      @selection-change="changedSelection"
     >
       <template slot="firstName" slot-scope="props">
          <v-icon>$vuetify.icons.line</v-icon>
@@ -165,6 +167,9 @@ export default {
 
     pageChanged(page) {
       this.page = page
+    },
+    changedSelection(selectedItems) {
+      console.log('################# ')
     }
   },
   computed: {
