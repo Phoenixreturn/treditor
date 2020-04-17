@@ -8,7 +8,6 @@
       :objData="selectedObject"
       v-model="selectedObject"
     ></JsonEditor>
-          <i class="fa fa-pencil" title="Edit"></i>
     <vue-ads-table
       :columns="columns"
       :rows="rows"
@@ -19,13 +18,9 @@
       @page-change="pageChanged"
       @selection-change="changedSelection"
     >
-      <template slot="firstName" slot-scope="props">
-         <v-icon>$vuetify.icons.line</v-icon>
-        <a
-          :href="`https://www.google.com/search?q=${props.row.firstName}+${props.row.lastName}`"
-          target="_blank"
-        > {{ props.row.firstName }}</a>
-      </template>
+   <template slot="shapeType" slot-scope="props">
+         <v-icon>$vuetify.icons.label</v-icon>
+            </template>
     </vue-ads-table>
   </div>
 </template>
@@ -61,14 +56,14 @@ export default {
       filter: "",
       columns: [
         {
-          property: "firstName",
-          title: "First Name",
+          property: "shapeType",
+          title: "#",
           direction: null,
-          filterable: true
+          sortable: false
         },
         {
-          property: "lastName",
-          title: "Last Name",
+          property: "phoenix",
+          title: "Shape ID",
           direction: null,
           filterable: true,
           collapseIcon: true
@@ -76,85 +71,61 @@ export default {
       ],
       rows: [
         {
-          firstName: "Josephine",
-          lastName: "Astrid"
+          shapeType: "Josephine",
+          phoenix: "Astrid"
         },
         {
-          firstName: "Boudewijn",
-          lastName: "Van Brabandt"
+          shapeType: "Boudewijn",
+          phoenix: "Van Brabandt"
         },
         {
-          firstName: "Albert II",
-          lastName: "Van Belgie",
+          shapeType: "Albert II",
+          phoenix: "Van Belgie",
           _children: [
             {
-              firstName: "Filip",
-              lastName: "Van Belgie",
+              shapeType: "Filip",
+              phoenix: "Van Belgie",
               _children: [
                 {
-                  firstName: "Elisabeth",
-                  lastName: "Van Brabant"
+                  shapeType: "Elisabeth",
+                  phoenix: "Van Brabant"
                 },
                 {
-                  firstName: "Gabriel",
-                  lastName: "Boudwijn"
+                  shapeType: "Gabriel",
+                  phoenix: "Boudwijn"
                 },
                 {
-                  firstName: "Emmanuel",
-                  lastName: "Van Belgie"
+                  shapeType: "Emmanuel",
+                  phoenix: "Van Belgie"
                 },
                 {
-                  firstName: "Eleonore",
-                  lastName: "Boudwijn",
+                  shapeType: "Eleonore",
+                  phoenix: "Boudwijn",
                   _hasChildren: true
                 }
               ]
             },
             {
-              firstName: "Astrid",
-              lastName: "Van Belgie"
+              shapeType: "Astrid",
+              phoenix: "Van Belgie"
             },
             {
-              firstName: "Laurent",
-              lastName: "Van Belgie"
+              shapeType: "Laurent",
+              phoenix: "Van Belgie"
             }
           ]
         },
         {
-          firstName: "Alexander",
-          lastName: "Van Belgie"
+          shapeType: "Alexander",
+          phoenix: "Van Belgie"
         },
         {
-          firstName: "Marie-Christine",
-          lastName: "Leopoldine"
+          shapeType: "Marie-Christine",
+          phoenix: "Leopoldine"
         },
         {
-          firstName: "Marie-Esmeralda",
-          lastName: "Leopoldine"
-        },
-        {
-          firstName: "Alexander",
-          lastName: "Van Belgie"
-        },
-        {
-          firstName: "Marie-Christine",
-          lastName: "Leopoldine"
-        },
-        {
-          firstName: "Marie-Esmeralda",
-          lastName: "Leopoldine"
-        },
-        {
-          firstName: "Alexander",
-          lastName: "Van Belgie"
-        },
-        {
-          firstName: "Marie-Christine",
-          lastName: "Leopoldine"
-        },
-        {
-          firstName: "Marie-Esmeralda",
-          lastName: "Leopoldine"
+          shapeType: "Marie-Esmeralda",
+          phoenix: "Leopoldine"
         }
       ]
     }
@@ -193,7 +164,7 @@ export default {
 
 <style scoped>
 .properties-tree {
-  border: 4px double black; /* Параметры границы */
-  padding: 10px; /* Поля вокруг текста */
+  border: 1px solid black; /* Параметры границы */
+  padding: 2px; /* Поля вокруг текста */
 }
 </style>
