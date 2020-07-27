@@ -67,6 +67,7 @@ export default {
       items: [
         { title: "Home", icon: "mdi-home-city", link: "stage" },
         { title: "TestComponent", icon: "mdi-account", link: "test" },
+        { title: "LoginComponent", icon: "mdi-account", link: "login" },
         { title: "Users", icon: "mdi-account-group-outline", link: "bio" }
       ]
     }
