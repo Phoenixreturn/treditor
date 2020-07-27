@@ -218,3 +218,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.block_content >>> input {
+  font-size: 12px;
+}
+</style>

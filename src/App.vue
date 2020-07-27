@@ -66,7 +66,7 @@ export default {
       color: "background",
       items: [
         { title: "Home", icon: "mdi-home-city", link: "stage" },
-        { title: "My Account", icon: "mdi-account", link: "editor" },
+        { title: "TestComponent", icon: "mdi-account", link: "test" },
         { title: "Users", icon: "mdi-account-group-outline", link: "bio" }
       ]
     }

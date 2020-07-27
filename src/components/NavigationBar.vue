@@ -10,6 +10,7 @@
         <b-nav-item href="#/">Home</b-nav-item>
         <b-nav-item href="#/resizable">Resizable</b-nav-item>
         <b-nav-item href="#/canvas">WhiteBoard</b-nav-item>
+        <b-nav-item href="#/test">TestComponent</b-nav-item>
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->

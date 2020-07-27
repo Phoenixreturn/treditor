@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import VueKonva from 'vue-konva'
 import App from './App.vue'
 import WhiteBoard from './components/whiteboard/WhiteBoard.vue'
+import TestComponent from './components/jsoneditor/Editor.vue'
 import vuetify from './plugins/vuetify';
 import {store} from './store';
 
@@ -14,7 +15,8 @@ const routes = [
   { path: '/', component: WhiteBoard },
   { path: '/stage', component: WhiteBoard },
   { path: '/editor', component: WhiteBoard },
-  { path: '/bio ', component: WhiteBoard }
+  { path: '/bio ', component: WhiteBoard },
+  { path: '/test', component: TestComponent}
 ]
 
 const router = new VueRouter({
