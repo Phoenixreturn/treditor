@@ -1,7 +1,8 @@
 <template>
   <v-container fill-height fluid class="ma-0 pa-0">
     <v-row align="center" class="ma-0 pa-0 ttttttt firstRow">
-      <TopPanel @create="createComponent"></TopPanel>
+      <h3>{{content}}</h3>
+      <TopPanel @create="createComponent"></TopPanel>        
     </v-row>
     <v-row class="ma-0 pa-0 ttttttt" style="height:92%">
       <v-col class="ma-0 pa-0" v-if="items1.length > 0" :cols="2">
@@ -93,6 +94,8 @@ import draggable from "vuedraggable"
 import LeftArrow from "../../assets/left_arrow.svg"
 import RightArrow from "../../assets/right_arrow.svg"
 
+import UserService from '../../services/user.service'
+
 export default {
   name: "WhiteBoard",
   // created: function() {
@@ -113,6 +116,7 @@ export default {
   data() {
     return {
       selectedObj: {},
+      content: '### stub ###',
       color: "#59c7f9",
       suckerCanvas: null,
       gridLayer: null,
@@ -214,6 +218,18 @@ export default {
     console.log(this.$attrs)
   },
   mounted: function() {
+      UserService.getPublicContent().then(
+      response => {
+        this.content = response.data;
+      },
+      error => {
+        console.log("UserService ####")
+        this.content =
+          (error.response && error.response.data) ||
+          error.message ||
+          error.toString();
+      }
+      );
     this.$nextTick(function() {
       window.addEventListener("resize", () => {
         const height = this.$refs.stageEl.$el.clientHeight
