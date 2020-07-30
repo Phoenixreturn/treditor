@@ -1,0 +1,92 @@
+<template>
+  <v-app>
+    <v-navigation-drawer app expand-on-hover permanent :color="color">
+      <template v-slot:prepend>
+        <v-list-item two-line>
+          <v-list-item-avatar>
+            <img src="../assets/avatar.jpg" />
+          </v-list-item-avatar>
+
+          <v-list-item-content>
+            <v-list-item-title>Robert Gallyamov</v-list-item-title>
+            <v-list-item-subtitle>Logged In</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </template>
+
+      <v-divider></v-divider>
+
+      <v-list dense>
+        <v-list-item v-for="item in items" :key="item.title" :to="item.link" link>
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-app-bar :color="color" app flat>
+      <v-menu offset-y>
+        <template v-slot:activator="{ on }">
+          <v-btn color="secondary" dark v-on="on">File</v-btn>
+        </template>
+        <v-list>
+          <v-list-item v-for="(item, index) in items" :key="index">
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-app-bar>
+
+    <!-- Sizes your content based upon application components -->
+    <v-content>
+      <router-view></router-view>
+    </v-content>
+    <v-footer app>
+      <SvgSprite class="sprite"></SvgSprite>
+    </v-footer>
+  </v-app>
+</template>
+
+<script>
+import Vue from "vue"
+import SvgSprite from "../assets/sprite.svg"
+
+export default {
+  name: "Treditor",
+  components: {
+    SvgSprite
+  },
+  data() {
+    return {
+      color: "background",
+      items: [
+        { title: "Home", icon: "mdi-home-city", link: "stage" },
+        { title: "TestComponent", icon: "mdi-account", link: "test" },
+        { title: "LoginComponent", icon: "mdi-account", link: "login" },
+        { title: "Users", icon: "mdi-account-group-outline", link: "bio" }
+      ]
+    }
+  }
+}
+</script>
+
+<style>
+.sprite {
+  height: 0;
+  width: 0;
+  position: absolute;
+}
+
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+</style>

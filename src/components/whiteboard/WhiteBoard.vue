@@ -1,11 +1,11 @@
 <template>
   <v-container fill-height fluid class="ma-0 pa-0">
-    <v-row align="center" class="ma-0 pa-0 ttttttt firstRow">
-      <h3>{{content}}</h3>
+    <v-row align="center" class="ma-0 pa-0 ttttttt firstRow">      
       <TopPanel @create="createComponent"></TopPanel>        
     </v-row>
     <v-row class="ma-0 pa-0 ttttttt" style="height:92%">
       <v-col class="ma-0 pa-0" v-if="items1.length > 0" :cols="2">
+        <h3>{{content}}</h3>
         <v-card>
           <v-tabs v-model="tab" background-color="primary" dark>
             <v-tab v-for="item in items1" :key="item.tab">{{ item.tab }}</v-tab>
