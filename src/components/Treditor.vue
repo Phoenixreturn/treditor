@@ -1,6 +1,9 @@
 <template>
   <v-app>
     <v-navigation-drawer app expand-on-hover permanent :color="color">
+       <dlg-wrapper ref="dlg">
+          <dlg-frame title="Dialog" message="Message"></dlg-frame>
+        </dlg-wrapper>
       <template v-slot:prepend>
         <v-list-item two-line>
           <v-list-item-avatar>
@@ -15,6 +18,10 @@
       </template>
 
       <v-divider></v-divider>
+
+      <dlg-wrapper ref="dlg">
+          <dlg-frame title="Dialog" message="Message"></dlg-frame>
+      </dlg-wrapper>
 
       <v-list dense>
         <v-list-item v-for="item in items" :key="item.title" :to="item.link" link>
@@ -35,7 +42,7 @@
           <v-btn color="secondary" dark v-on="on">File</v-btn>
         </template>
         <v-list>
-          <v-list-item v-for="(item, index) in items" :key="index">
+          <v-list-item v-for="(item, index) in items" :key="index" @click="open_dlg">
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
         </v-list>
@@ -55,11 +62,15 @@
 <script>
 import Vue from "vue"
 import SvgSprite from "../assets/sprite.svg"
+import DlgWrapper from "@/components/whiteboard/DlgWrapper";
+import DlgFrame from "@/components/whiteboard/DlgFrame";
 
 export default {
   name: "Treditor",
   components: {
-    SvgSprite
+    SvgSprite,
+    DlgWrapper,
+    DlgFrame
   },
   data() {
     return {
@@ -70,6 +81,16 @@ export default {
         { title: "LoginComponent", icon: "mdi-account", link: "login" },
         { title: "Users", icon: "mdi-account-group-outline", link: "bio" }
       ]
+    }
+  },
+  methods: {
+    clickedOnFIle(event, item) {
+      console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$' + item.link)
+    },
+    open_dlg: function(event) {
+      this.$refs.dlg.open().then(result => {
+        console.log('Result: ', result)
+      })
     }
   }
 }

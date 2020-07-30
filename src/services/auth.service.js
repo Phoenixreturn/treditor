@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'http://192.168.0.103:8080/springtest/api/auth';
+const API_URL = 'http://192.168.0.103:8080/springtest/api/auth/';
 
 class AuthService {
     login(user) {
@@ -23,7 +23,7 @@ class AuthService {
     }
 
     register(user) {
-        return axios.post(API_URL + 'sign_up', {
+        return axios.post(API_URL + 'signup', {
             username: user.username,
             email: user.email,
             password: user.password

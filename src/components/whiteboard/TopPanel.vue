@@ -1,5 +1,5 @@
 <template>
-  <v-btn-toggle mandatory>
+  <v-btn-toggle>
     <v-btn class="buttons1" @click="onClick('rectangle')">
       <v-icon>$vuetify.icons.rectangle</v-icon>
     </v-btn>

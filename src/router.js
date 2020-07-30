@@ -3,7 +3,10 @@ import VueRouter from 'vue-router'
 import WhiteBoard from './components/whiteboard/WhiteBoard.vue'
 import TestComponent from './components/jsoneditor/Editor.vue'
 import LoginComponent from './components/registration/Login.vue'
+import RegisterComponent from './components/registration/Register.vue'
+import ProfileComponent from './components/registration/Profile.vue'
 import MainComponent from './components/Treditor.vue'
+import LearnComponent from './components/learning/LearnComponent'
 
 Vue.use(VueRouter)
 
@@ -13,11 +16,14 @@ const routes = [
           { path: '', component: WhiteBoard },
           { path: 'stage', component: WhiteBoard },
           { path: 'editor', component: WhiteBoard },
-          { path: 'bio ', component: WhiteBoard },
+          { path: 'bio', component: WhiteBoard },
           { path: 'test', component: TestComponent},
       ] 
     },
+    { path: '/learning', component: LearnComponent},
     { path: '/login', component: LoginComponent },
+    { path: '/register', component: RegisterComponent },
+    { path: '/profile', component: ProfileComponent },
   ]
   
   export const router = new VueRouter({
