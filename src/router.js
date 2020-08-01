@@ -2,13 +2,15 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import WhiteBoard from './components/whiteboard/WhiteBoard.vue'
 import TestComponent from './components/jsoneditor/Editor.vue'
-import LoginComponent from './components/registration/Login.vue'
-import RegisterComponent from './components/registration/Register.vue'
-import ProfileComponent from './components/registration/Profile.vue'
+import OnboardComponent from './components/onboarding/Onboarding.vue'
+import RegisterComponent from './components/onboarding/Register.vue'
+import ProfileComponent from './components/onboarding/Profile.vue'
 import MainComponent from './components/Treditor.vue'
 import LearnComponent from './components/learning/LearnComponent'
 
 Vue.use(VueRouter)
+
+const LOGIN_PATH = '/onboarding';
 
 const routes = [
     { path: '/', component: MainComponent,
@@ -21,11 +23,24 @@ const routes = [
       ] 
     },
     { path: '/learning', component: LearnComponent},
-    { path: '/login', component: LoginComponent },
+    { path: '/onboarding', component: OnboardComponent },
     { path: '/register', component: RegisterComponent },
     { path: '/profile', component: ProfileComponent },
-  ]
+]
   
-  export const router = new VueRouter({
-  routes
-  })
+const router = new VueRouter({
+routes
+})
+
+router.beforeEach((to, from, next) => {
+  const loggedIn = localStorage.getItem('user');
+
+  if (!loggedIn && LOGIN_PATH !== to.path) {
+    console.log("Redirect to onboarding page $$$")
+    next('/onboarding');
+  } else {
+    next();
+  }
+})
+
+export { router };
