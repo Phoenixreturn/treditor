@@ -12,9 +12,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="hover:vue-ads-bg-blue-500" v-for="item in Object.keys(obj)" :key="item">
-          <td>{{item}}</td>
-          <td>{{obj[item]}}</td>
+        <tr class="hover:vue-ads-bg-blue-500" v-for="entry in flattenedValues.entries()" :key="entry[0]">
+          <td>{{entry[0]}}</td>
+          <td><CellView :val=entry[1]></CellView></td>
         </tr>
       </tbody>
     </table>
@@ -22,16 +22,25 @@
 </template>
 
 <script>
+import CellView from './CellView.vue'
+import flatten from './flatten.js'
+
 export default {
   name: "Editor",
+  components: {
+    CellView
+  },
+  mixins: [
+    flatten
+  ],
   props: {
     obj: {
       type: Object,
-      default: function() {
-        return { one: "first", two: { three: "third" } }
-      }
-    }
-  }
+      default: function () {
+        return { one: "first", two: { three: "Something new in these day", expanded: true }, test: { yy: 'ttt', xx: "robert"}, fourc: true, svsf: 454 }
+      },
+    },
+  },
 }
 </script>
 

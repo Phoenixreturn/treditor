@@ -32,15 +32,15 @@ const router = new VueRouter({
 routes
 })
 
-router.beforeEach((to, from, next) => {
-  const loggedIn = localStorage.getItem('user');
+// router.beforeEach((to, from, next) => {
+//   const loggedIn = localStorage.getItem('user');
 
-  if (!loggedIn && LOGIN_PATH !== to.path) {
-    console.log("Redirect to onboarding page $$$")
-    next('/onboarding');
-  } else {
-    next();
-  }
-})
+//   if (!loggedIn && LOGIN_PATH !== to.path) {
+//     console.log("Redirect to onboarding page $$$")
+//     next('/onboarding');
+//   } else {
+//     next();
+//   }
+// })
 
 export { router };
