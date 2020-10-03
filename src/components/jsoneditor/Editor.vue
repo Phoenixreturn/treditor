@@ -41,6 +41,9 @@ export default {
       },
     },
   },
+   created: function () {   
+    console.log('Created MyEditor.')
+  }
 }
 </script>
 

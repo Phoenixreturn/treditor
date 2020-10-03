@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import Vuex from 'vuex'
 import VueKonva from 'vue-konva'
 import VeeValidate from 'vee-validate';
 import App from './App.vue'

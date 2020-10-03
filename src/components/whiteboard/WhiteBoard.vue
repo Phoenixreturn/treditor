@@ -96,6 +96,8 @@ import RightArrow from "../../assets/right_arrow.svg"
 
 import UserService from '../../services/user.service'
 
+import operations from '../../store/operation.types'
+
 export default {
   name: "WhiteBoard",
   // created: function() {
@@ -115,7 +117,7 @@ export default {
   },
   data() {
     return {
-      selectedObj: {},
+      selectedObj: null,
       content: '### stub ###',
       color: "#59c7f9",
       suckerCanvas: null,
@@ -292,6 +294,10 @@ export default {
       return true
     },
     customFunct(e, on) {
+      if (this.$store.state.event.type == operations.CREATE) {
+        this.createComponent(this.$store.state.event.primitive, e.evt.layerX, e.evt.layerY);
+      }
+      // это нужно каким то боком нужно для контекстного меню
       on["click"](e.evt)
     },
     handleListClick(item) {
@@ -358,9 +364,11 @@ export default {
     getGridSize(x) {
       return Math.round(x / this.gridSize) * this.gridSize
     },
-    createComponent(e) {
+    createComponent(e, x, y) {
       var factory = Vue.extend(ShapeFactory)
       var shape = new factory().createShape(e)
+      shape.x = x;
+      shape.y = y;
       this.shapes.push(shape)
       var kShape = Vue.component(shape.type)
 

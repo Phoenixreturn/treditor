@@ -1,13 +1,14 @@
 <template>
   <div class="properties-tree" height="100%">
-    <JsonEditor
+    <!-- <JsonEditor
       :options="{
             confirmText: 'confirm',
             cancelText: 'cancel',
         }"
       :objData="selectedObject"
       v-model="selectedObject"
-    ></JsonEditor>
+    ></JsonEditor> -->
+    <MyEditor v-if="selectedObject != null" :obj="selectedObject"></MyEditor>
     <vue-ads-table
       :columns="columns"
       :rows="rows"
@@ -27,21 +28,21 @@
 
 <script>
 import Vue from "vue"
-import JsonEditor from "../treeview"
+// import JsonEditor from "../treeview"
+import MyEditor from "../jsoneditor/Editor.vue"
 import { VueAdsTable } from "vue-ads-table-tree"
-Vue.use(JsonEditor)
+// Vue.use(MyEditor)
 
 export default {
   name: "PropertiesPanel",
   components: {
-    VueAdsTable
+    VueAdsTable,
+    MyEditor
   },
   props: {
     currentObject: {
       type: Object,
-      default: function() {
-        return {}
-      }
+      default: null,
     },
     items: {
       type: Array,
