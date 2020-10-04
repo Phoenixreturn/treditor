@@ -5,7 +5,9 @@ const eventContext = {
     namespaced: true,
     state: {
         type: types.INIT,
-        primitive: primitives.CIRCLE
+        primitive: primitives.CIRCLE,
+        startPoint: {},
+        createdPrimitve: null
     }
 }
 

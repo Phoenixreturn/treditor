@@ -35,7 +35,10 @@
               :config="stageSize"
               @dblclick="handleStageMouseDown"
               @transformend="handleTransformEnd"
-              @click="customFunct($event, on)"
+              @mousedown="startCreating($event)"
+              @mousemove="whileCreating($event)"
+              @mouseup="endCreating($event)"
+              @click="eventHandlerContextMenu($event, on)"
               style="background: #dfffff; height:100%"
             >
               <v-layer ref="layerEl">
@@ -104,16 +107,10 @@ import RightArrow from "../../assets/right_arrow.svg"
 import UserService from '../../services/user.service'
 
 import operations from '../../store/operation.types'
+import primitives from './primitives/primitive.type'
 
 export default {
   name: "WhiteBoard",
-  // created: function() {
-  //     axios.get('http://192.168.0.103:8080/springtest/primitives').then(function(response) {
-  //     }.bind(this))
-  //     .catch(e => {
-  //         this.errors.push(e);
-  //     })
-  // },
   components: {
     TopPanel,
     PropertiesPanel,
@@ -303,12 +300,47 @@ export default {
     checkMove(evt) {
       return true
     },
-    customFunct(e, on) {
-      if (this.$store.state.event.type == operations.CREATE) {
-        this.createComponent(this.$store.state.event.primitive, e.evt.layerX, e.evt.layerY);
-      }
+    eventHandlerContextMenu(event, on) {
       // это нужно каким то боком нужно для контекстного меню
-      on["click"](e.evt)
+      on["click"](event.evt)
+    },
+    startCreating(event) {
+      console.log('startCreating')
+      if (this.$store.state.event.type == operations.CREATE) {        
+        if (this.$store.state.event.primitive == primitives.RECTANGLE) {
+          this.$store.state.event.type = operations.CREATING
+          this.$store.state.event.startPoint.x = event.evt.layerX
+          this.$store.state.event.startPoint.y = event.evt.layerY
+          return
+        }
+        this.createComponent(this.$store.state.event.primitive, event.evt.layerX, event.evt.layerY);
+      }  
+    },
+    whileCreating(event) {
+      console.log('whileCreating')
+      if (this.$store.state.event.type == operations.CREATING) {
+        let startX = this.$store.state.event.startPoint.x
+        let startY = this.$store.state.event.startPoint.y
+        let initWidth = Math.abs(startX - event.evt.layerX)
+        let initHeight = Math.abs(startY - event.evt.layerY)
+        if (initWidth >= 2 || initHeight >= 2) {
+          this.$store.state.event.createdPrimitve = this.createComponent(this.$store.state.event.primitive, startX, startY)
+          this.$set(this.$store.state.event.createdPrimitve, 'width', initWidth)
+          this.$set(this.$store.state.event.createdPrimitve, 'height', initHeight)
+        }
+      }
+    },
+    endCreating(event) {
+      console.log('endCreating')
+      if (this.$store.state.event.type == operations.CREATING) {
+        let startX = this.$store.state.event.startPoint.x
+        let startY = this.$store.state.event.startPoint.y
+        let finalWidth = Math.abs(startX - event.evt.layerX)
+        let finalHeight = Math.abs(startY - event.evt.layerY)
+        this.$set(this.$store.state.event.createdPrimitve, 'width', finalWidth)
+        this.$set(this.$store.state.event.createdPrimitve, 'height', finalHeight)
+        this.$store.state.event.type = operations.CREATE
+      }      
     },
     handleListClick(item) {
       var kShape = Vue.component("vLine")
@@ -380,6 +412,7 @@ export default {
       shape.x = x;
       shape.y = y;
       this.shapes.push(shape)
+      return shape
     },
     dragStartEvent(e) {
       console.log('dragStartEvent')
