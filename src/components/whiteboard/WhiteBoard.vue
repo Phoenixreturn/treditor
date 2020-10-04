@@ -5,7 +5,6 @@
     </v-row>
     <v-row class="ma-0 pa-0 ttttttt" style="height:92%">
       <v-col class="ma-0 pa-0" v-if="items1.length > 0" :cols="2">
-        <h3>{{content}}</h3>
         <v-card>
           <v-tabs v-model="tab" background-color="primary" dark>
             <v-tab v-for="item in items1" :key="item.tab">{{ item.tab }}</v-tab>
@@ -41,13 +40,13 @@
             >
               <v-layer ref="layerEl">
                 <component v-for="shape in shapes" 
-                           v-bind:is="shape.type" 
-                           v-bind="shape"
+                           v-bind:is=shape.type
+                           v-bind:key=shape.id
+                           v-bind:config=shape
                            @dblclick="handleStageMouseDown"
                            @transformEnd="handleTransformEnd"
                            @dragend="dragEndEvent"
-                           @dragstart="dragStartEvent"
-                           v-bind:key="shape.id"></component>
+                           @dragstart="dragStartEvent"></component>
                 <v-transformer ref="transformer" />
               </v-layer>
             </v-stage>
@@ -218,10 +217,8 @@ export default {
   },
   watch: {
     selectedObj: function(val) {
-      console.log('selected object changed')
       this.selectedObj = val
       this.items2[0].objProps = this.propTab
-      console.log(this.shapes.toString())
     }
   },
   created: function() {
