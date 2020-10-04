@@ -12,7 +12,6 @@
     <vue-ads-table
       :columns="columns"
       :rows="rows"
-      :filter="filterValue"
       :page="page"
       selectable
       @filter-change="filterChanged"

@@ -34,12 +34,20 @@
             <v-stage
               ref="stageEl"
               :config="stageSize"
-              @mouseDown="handleStageMouseDown"
+              @dblclick="handleStageMouseDown"
               @transformend="handleTransformEnd"
               @click="customFunct($event, on)"
               style="background: #dfffff; height:100%"
             >
               <v-layer ref="layerEl">
+                <component v-for="shape in shapes" 
+                           v-bind:is="shape.type" 
+                           v-bind="shape"
+                           @dblclick="handleStageMouseDown"
+                           @transformEnd="handleTransformEnd"
+                           @dragend="dragEndEvent"
+                           @dragstart="dragStartEvent"
+                           v-bind:key="shape.id"></component>
                 <v-transformer ref="transformer" />
               </v-layer>
             </v-stage>
@@ -125,7 +133,6 @@ export default {
       suckerArea: [],
       isSucking: false,
       shapes: [],
-      errors: [],
       displayValue: "none",
       opacityValue: "60%",
       editable: true,
@@ -217,7 +224,6 @@ export default {
   },
   created: function() {
     this.items2[0].objProps = this.propTab
-    console.log(this.$attrs)
   },
   mounted: function() {
       UserService.getPublicContent().then(
@@ -232,13 +238,14 @@ export default {
           error.toString();
       }
       );
-    this.$nextTick(function() {
+    this.$nextTick(() => {
+      let this_ptr = this;
       window.addEventListener("resize", () => {
-        const height = this.$refs.stageEl.$el.clientHeight
-        const width = this.$refs.stageEl.$el.clientWidth
-        this.stageSize.width = width
-        this.stageSize.height = height
-        this.gridLayer.draw()
+        const height = this_ptr.$refs.stageEl.$el.clientHeight
+        const width = this_ptr.$refs.stageEl.$el.clientWidth
+        this_ptr.stageSize.width = width
+        this_ptr.stageSize.height = height
+        this_ptr.gridLayer.draw()
         console.log("############### Window resize event #######################")
       })
     })
@@ -370,32 +377,25 @@ export default {
       shape.x = x;
       shape.y = y;
       this.shapes.push(shape)
-      var kShape = Vue.component(shape.type)
-
-      var anchor = new kShape({
-        propsData: {
-          config: shape,
-          key: shape.id
+    },
+    dragStartEvent(e) {
+      console.log('dragStartEvent')
+      if (!e.evt.ctrlKey) {
+          e.target.stopDrag();
         }
-      })
-      this.$refs.layerEl.getNode().add(anchor.getNode())
-      anchor.$parent = this.$refs.layerEl
-      anchor.getNode().on("transformend", this.handleTransformEnd)
-      anchor.getNode().on("dragend", e => {
-        anchor.getNode().position({
-          x: this.getGridSize(anchor.getNode().x()),
-          y: this.getGridSize(anchor.getNode().y())
-        })
-        this.$refs.stageEl.getNode().batchDraw()
-      })
-
-      anchor.$mount()
-      this.$refs.layerEl.getNode().draw()
+    },
+    dragEndEvent(e) {
+      console.log('dragEndEvent' )
+    //   anchor.getNode().position({
+      //     x: this.getGridSize(anchor.getNode().x()),
+      //     y: this.getGridSize(anchor.getNode().y())
+      //   })
+      //   this.$refs.stageEl.getNode().batchDraw()
     },
     handleStageMouseDown(e) {
       // clicked on stage - clear selection
       if (e.target === e.target.getStage()) {
-        this.selectedObj = {}
+        this.selectedObj = {};
         this.updateTransformer()
         return
       }
