@@ -218,8 +218,10 @@ export default {
   },
   watch: {
     selectedObj: function(val) {
+      console.log('selected object changed')
       this.selectedObj = val
       this.items2[0].objProps = this.propTab
+      console.log(this.shapes.toString())
     }
   },
   created: function() {
@@ -258,7 +260,13 @@ export default {
       this.stageSize.height = height
       this.$refs.stageEl.getNode().width(this.stageSize.width)
       this.$refs.stageEl.getNode().height(this.stageSize.height)
-      this.gridLayer = new Konva.Layer()
+      if (this.gridLayer != null) {
+        this.gridLayer.removeChildren()        
+      } else {
+        this.gridLayer = new Konva.Layer()
+        this.$refs.stageEl.getNode().add(this.gridLayer)
+        this.gridLayer.moveToBottom()
+      }
       var padding = this.gridSize
       console.log(this.stageSize.width, padding, this.stageSize.width / padding)
       for (var i = 0; i < this.stageSize.width / padding; i++) {
@@ -284,9 +292,7 @@ export default {
             strokeWidth: 2
           })
         )
-      }
-      this.$refs.stageEl.getNode().add(this.gridLayer)
-      this.gridLayer.moveToBottom()
+      }      
       this.gridLayer.draw()
     })
   },

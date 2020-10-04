@@ -14,7 +14,7 @@
       <tbody>
         <tr class="hover:vue-ads-bg-blue-500" v-for="entry in flattenedValues.entries()" :key="entry[0]">
           <td>{{entry[0]}}</td>
-          <td><CellView :val=entry[1]></CellView></td>
+          <td><CellView :val=entry></CellView></td>
         </tr>
       </tbody>
     </table>

@@ -21,13 +21,13 @@ export default {
                 if (Object.prototype.hasOwnProperty.call(obj, prop)) {
                     if (Object.prototype.hasOwnProperty.call(obj[prop], "expanded") 
                             && obj[prop]["expanded"] === true) {
-                        entries.set(prop, obj[prop]);
+                        entries.set(prop, obj);
                         let recursiveEntries = this.flatten(obj[prop]);
                         recursiveEntries.forEach((value, key) => {
                             entries.set(key, value);
                         });
                     } else if (prop !== 'expanded') {
-                        entries.set(prop, obj[prop]);
+                        entries.set(prop, obj);
                     }                
                 }
             }

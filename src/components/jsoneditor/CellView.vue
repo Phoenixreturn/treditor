@@ -1,11 +1,11 @@
 <template>
     <div>
-        <span v-if="typeof val === 'string'">
+        <span v-if="typeof val[1][val[0]] === 'string'">
             <click-to-edit-string :value="val"></click-to-edit-string></span>
-        <span v-else-if="typeof val === 'number'">
+        <span v-else-if="typeof val[1][val[0]] === 'number'">
             <click-to-edit-number :value="val"></click-to-edit-number>
         </span>
-        <span v-else-if="typeof val === 'object'">
+        <span v-else-if="typeof val[1][val[0]] === 'object'">
             <children-button v-on:click.native="setExpanded"
                             :expanded="expandedSign" 
                             :loading="false" >

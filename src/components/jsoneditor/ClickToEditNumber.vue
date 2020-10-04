@@ -3,8 +3,8 @@
     <input type="number"
            v-if="edit"
            :value="valueLocal"
-           @blur.native="valueLocal = $event.target.value; edit = false; $emit('input', valueLocal);"
-           @keyup.enter.native="valueLocal = $event.target.value; edit = false; $emit('input', valueLocal);"
+           @blur="valueLocal = $event.target.value; edit = false; $emit('input', valueLocal);"
+           @keyup.enter="valueLocal = $event.target.value; edit = false; $emit('input', valueLocal);"
            v-focus=""
              />
         <p v-else @click="edit = true;">
@@ -21,13 +21,16 @@
   data () {
   return {
       edit: false,
-      valueLocal: this.value
+      valueLocal: this.value[1][this.value[0]]
     }
   },
 
   watch: {
+    valueLocal: function() {
+      this.$set(this.value[1], this.value[0], this.valueLocal)
+    },
     value: function() {
-      this.valueLocal = this.value;
+      this.valueLocal = this.value[1][this.value[0]];
     }
   },
 
