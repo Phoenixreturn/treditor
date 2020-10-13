@@ -8,8 +8,6 @@ class Shape {
     rotation = 0
     scaleX =  1
     scaleY = 1
-    width = this.getRandomInt(100)
-    height = this.getRandomInt(100)
     fill = 'red'
     draggable = true    
 

@@ -11,7 +11,7 @@
     <MyEditor v-if="selectedObject != null" :obj="selectedObject"></MyEditor>
     <vue-ads-table
       :columns="columns"
-      :rows="rows"
+      :rows="items"
       :page="page"
       selectable
       @filter-change="filterChanged"
@@ -56,78 +56,19 @@ export default {
       filter: "",
       columns: [
         {
-          property: "shapeType",
+          property: "id",
           title: "#",
           direction: null,
           sortable: false
         },
         {
-          property: "phoenix",
+          property: "type",
           title: "Shape ID",
           direction: null,
           filterable: true,
           collapseIcon: true
         }
       ],
-      rows: [
-        {
-          shapeType: "Josephine",
-          phoenix: "Astrid"
-        },
-        {
-          shapeType: "Boudewijn",
-          phoenix: "Van Brabandt"
-        },
-        {
-          shapeType: "Albert II",
-          phoenix: "Van Belgie",
-          _children: [
-            {
-              shapeType: "Filip",
-              phoenix: "Van Belgie",
-              _children: [
-                {
-                  shapeType: "Elisabeth",
-                  phoenix: "Van Brabant"
-                },
-                {
-                  shapeType: "Gabriel",
-                  phoenix: "Boudwijn"
-                },
-                {
-                  shapeType: "Emmanuel",
-                  phoenix: "Van Belgie"
-                },
-                {
-                  shapeType: "Eleonore",
-                  phoenix: "Boudwijn",
-                  _hasChildren: true
-                }
-              ]
-            },
-            {
-              shapeType: "Astrid",
-              phoenix: "Van Belgie"
-            },
-            {
-              shapeType: "Laurent",
-              phoenix: "Van Belgie"
-            }
-          ]
-        },
-        {
-          shapeType: "Alexander",
-          phoenix: "Van Belgie"
-        },
-        {
-          shapeType: "Marie-Christine",
-          phoenix: "Leopoldine"
-        },
-        {
-          shapeType: "Marie-Esmeralda",
-          phoenix: "Leopoldine"
-        }
-      ]
     }
   },
 

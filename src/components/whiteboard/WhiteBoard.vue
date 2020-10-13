@@ -307,7 +307,8 @@ export default {
     startCreating(event) {
       console.log('startCreating')
       if (this.$store.state.event.type == operations.CREATE) {        
-        if (this.$store.state.event.primitive == primitives.RECTANGLE) {
+        if (this.$store.state.event.primitive == primitives.RECTANGLE 
+              || this.$store.state.event.primitive == primitives.CIRCLE) {
           this.$store.state.event.type = operations.CREATING
           this.$store.state.event.startPoint.x = event.evt.layerX
           this.$store.state.event.startPoint.y = event.evt.layerY
@@ -321,12 +322,21 @@ export default {
       if (this.$store.state.event.type == operations.CREATING) {
         let startX = this.$store.state.event.startPoint.x
         let startY = this.$store.state.event.startPoint.y
-        let initWidth = Math.abs(startX - event.evt.layerX)
-        let initHeight = Math.abs(startY - event.evt.layerY)
-        if (initWidth >= 2 || initHeight >= 2) {
-          this.$store.state.event.createdPrimitve = this.createComponent(this.$store.state.event.primitive, startX, startY)
-          this.$set(this.$store.state.event.createdPrimitve, 'width', initWidth)
-          this.$set(this.$store.state.event.createdPrimitve, 'height', initHeight)
+        let initWidth = event.evt.layerX -  startX
+        let initHeight = event.evt.layerY - startY
+        if (Math.abs(initWidth) >= 2 || Math.abs(initHeight) >= 2) {
+          if (this.$store.state.event.createdPrimitve === null) {
+            this.$store.state.event.createdPrimitve = 
+              this.createComponent(this.$store.state.event.primitive, startX, startY)
+          }    
+          if (this.$store.state.event.primitive == primitives.RECTANGLE) {
+            this.$set(this.$store.state.event.createdPrimitve, 'width', initWidth)
+            this.$set(this.$store.state.event.createdPrimitve, 'height', initHeight)
+          } else if (this.$store.state.event.primitive == primitives.CIRCLE) {
+            let rad = Math.max(Math.abs(initWidth), Math.abs(initHeight))
+            this.$set(this.$store.state.event.createdPrimitve, 'radius', rad)
+          }
+          
         }
       }
     },
@@ -335,10 +345,16 @@ export default {
       if (this.$store.state.event.type == operations.CREATING) {
         let startX = this.$store.state.event.startPoint.x
         let startY = this.$store.state.event.startPoint.y
-        let finalWidth = Math.abs(startX - event.evt.layerX)
-        let finalHeight = Math.abs(startY - event.evt.layerY)
-        this.$set(this.$store.state.event.createdPrimitve, 'width', finalWidth)
-        this.$set(this.$store.state.event.createdPrimitve, 'height', finalHeight)
+        let finalWidth = event.evt.layerX - startX
+        let finalHeight = event.evt.layerY - startY
+        if (this.$store.state.event.primitive == primitives.RECTANGLE) {
+            this.$set(this.$store.state.event.createdPrimitve, 'width', finalWidth)
+            this.$set(this.$store.state.event.createdPrimitve, 'height', finalHeight)
+        } else if (this.$store.state.event.primitive == primitives.CIRCLE) {
+            let rad = Math.max(Math.abs(finalWidth), Math.abs(finalHeight))
+            this.$set(this.$store.state.event.createdPrimitve, 'radius', rad)
+        }
+        this.$store.state.event.createdPrimitve = null        
         this.$store.state.event.type = operations.CREATE
       }      
     },

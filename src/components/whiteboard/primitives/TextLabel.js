@@ -1,6 +1,6 @@
-import Shape from './Shape'
+import NonCircle from './NonCircle'
 
-class TextLabel extends Shape {
+class TextLabel extends NonCircle {
     constructor(text, fontSize) {
         super()
         this.text = text

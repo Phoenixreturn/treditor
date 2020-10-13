@@ -1,6 +1,6 @@
-import Shape from './Shape'
+import NonCircle from './NonCircle'
 
-class Rectangle extends Shape {
+class Rectangle extends NonCircle {
     type = 'vRect'
 }
 
