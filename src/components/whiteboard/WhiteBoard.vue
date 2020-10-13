@@ -411,8 +411,10 @@ export default {
       if (this.selectedObj) {
         this.selectedObj.x = this.getGridSize(e.target.attrs.x)
         this.selectedObj.y = this.getGridSize(e.target.attrs.y)
-        this.selectedObj.height = this.getGridSize(e.target.attrs.height)
-        this.selectedObj.width = this.getGridSize(e.target.attrs.width)
+        if (this.selectedObj.type !== 'vCircle') {
+          this.selectedObj.width = this.getGridSize(e.target.attrs.width)
+          this.selectedObj.height = this.getGridSize(e.target.attrs.height)
+        }
         this.selectedObj.rotation = this.getGridSize(e.target.attrs.rotation)
         // this.selectedObj.scaleX = this.getGridSize(e.target.attrs.scaleX);
         // this.selectedObj.scaleY = this.getGridSize(e.target.attrs.scaleY);
