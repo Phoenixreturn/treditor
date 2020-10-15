@@ -45,6 +45,7 @@
                 <component v-for="shape in shapes" 
                            v-bind:is=shape.type
                            v-bind:key=shape.id
+                           ref='shapes'
                            v-bind:config=shape
                            @dblclick="handleStageMouseDown"
                            @transformEnd="handleTransformEnd"
@@ -222,6 +223,9 @@ export default {
     this.items2[0].objProps = this.propTab
   },
   mounted: function() {
+    this.$root.$on('openProject', data => {
+      console.log('opened project ########################################')
+    })
       UserService.getPublicContent().then(
       response => {
         this.content = response.data;
@@ -340,7 +344,7 @@ export default {
         }
       }
     },
-    endCreating(event) {
+     endCreating(event) {
       console.log('endCreating')
       if (this.$store.state.event.type == operations.CREATING) {
         let startX = this.$store.state.event.startPoint.x
@@ -414,6 +418,9 @@ export default {
         if (this.selectedObj.type !== 'vCircle') {
           this.selectedObj.width = this.getGridSize(e.target.attrs.width)
           this.selectedObj.height = this.getGridSize(e.target.attrs.height)
+        } else {
+          this.$refs.layerEl.getNode().clear()
+          this.$refs.layerEl.getNode().draw()
         }
         this.selectedObj.rotation = this.getGridSize(e.target.attrs.rotation)
         // this.selectedObj.scaleX = this.getGridSize(e.target.attrs.scaleX);
