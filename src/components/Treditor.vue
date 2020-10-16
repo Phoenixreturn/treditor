@@ -39,10 +39,10 @@
     <v-app-bar :color="color" app flat>
       <v-menu offset-y>
         <template v-slot:activator="{ on }">
-          <v-btn color="secondary" dark v-on="on">File</v-btn>
+          <v-btn color="secondary" dark v-on="on">Project</v-btn>
         </template>
         <v-list>
-          <v-list-item v-for="(item, index) in items" :key="index" @click="open_dlg">
+          <v-list-item v-for="(item, index) in menuItems" :key="index" @click="do_action(item)">
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
         </v-list>
@@ -80,6 +80,10 @@ export default {
         { title: "TestComponent", icon: "mdi-account", link: "test" },
         { title: "LoginComponent", icon: "mdi-account", link: "login" },
         { title: "Users", icon: "mdi-account-group-outline", link: "bio" }
+      ],
+      menuItems: [
+        { title: "Open", action: "open" },
+        { title: "Save", action: "save" }
       ]
     }
   },
@@ -87,12 +91,24 @@ export default {
     clickedOnFIle(event, item) {
       console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$' + item.link)
     },
-    open_dlg: function(event) {
+    do_action: function(item) {
+      switch(item.action) {
+        case 'open':
+          this.open_dialog();
+          break;
+        case 'save':
+          break;
+        default:
+          break;
+      }
+
+    },
+    open_dialog: function() {
       this.$refs.dlg.open().then(result => {
         console.log('Result: ', result)
       })
-    }
   }
+  },
 }
 </script>
 
