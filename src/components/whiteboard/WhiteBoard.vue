@@ -106,6 +106,7 @@ import LeftArrow from "../../assets/left_arrow.svg"
 import RightArrow from "../../assets/right_arrow.svg"
 
 import UserService from '../../services/user.service'
+import WhiteBoardService from '../../services/whiteboard.service'
 
 import operations from '../../store/operation.types'
 import primitives from './primitives/primitive.type'
@@ -223,8 +224,14 @@ export default {
     this.items2[0].objProps = this.propTab
   },
   mounted: function() {
+    var this_ptr = this;
     this.$root.$on('openProject', data => {
       console.log('opened project ########################################')
+    })
+
+    this.$root.$on('saveProject', (data) => {
+      console.log('saved project ########################')
+      WhiteBoardService.saveProject(this_ptr.shapes);
     })
       UserService.getPublicContent().then(
       response => {

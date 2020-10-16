@@ -97,6 +97,7 @@ export default {
           this.open_dialog();
           break;
         case 'save':
+          this.$root.$emit('saveProject')
           break;
         default:
           break;

@@ -1,6 +1,7 @@
 import axios from 'axios'
+import settings from '../config/settings'
 
-const API_URL = 'http://192.168.0.103:8080/springtest/api/auth/';
+const API_URL = settings.getConnectionString() + 'api/auth/';
 
 class AuthService {
     login(user) {
