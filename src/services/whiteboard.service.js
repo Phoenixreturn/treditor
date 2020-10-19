@@ -1,12 +1,9 @@
-import axios from 'axios'
-import settings from '../config/settings'
-
-const API_URL = settings.getConnectionString()
+import httpClient from './httpClient'
 
 class WhiteBoardService {
     getProjects(projects) {
-        return axios
-            .get(API_URL + 'projects')
+        return httpClient
+            .get('projects')
             .then(response => {
                 projects.length = 0
                 for (let propName in response.data) {
@@ -18,7 +15,7 @@ class WhiteBoardService {
     }
     
     updateProject(projectId, shapes) {
-        return axios.put(API_URL + 'projects/' + projectId, { 'shapes': shapes }).then(response => {
+        return httpClient.put('projects/' + projectId, { 'shapes': shapes }).then(response => {
             console.log(response.data)
         }).catch(data => {
             console.log(data)
@@ -26,7 +23,7 @@ class WhiteBoardService {
     }
 
     getProject(projectId) {
-        return axios.get(API_URL + 'projects/' + projectId);
+        return httpClient.get('projects/' + projectId);
     }
 }
 

@@ -1,11 +1,10 @@
-import axios from 'axios'
-import settings from '../config/settings'
+import httpClient from './httpClient'
 
-const API_URL = settings.getConnectionString() + 'api/auth/';
+const API_URL = 'api/auth/'
 
 class AuthService {
     login(user) {
-        return axios
+        return httpClient
         .post(API_URL + 'signin', {
             username: user.username,
             password: user.password
@@ -24,7 +23,7 @@ class AuthService {
     }
 
     register(user) {
-        return axios.post(API_URL + 'signup', {
+        return httpClient.post(API_URL + 'signup', {
             username: user.username,
             email: user.email,
             password: user.password
@@ -32,4 +31,4 @@ class AuthService {
     }
 }
 
-export default new AuthService();
+export default new AuthService()
