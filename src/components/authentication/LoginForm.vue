@@ -13,7 +13,7 @@
           prepend-icon="mdi-account"
           type="text"
           required
-          :rules="[v => !!v || 'Login is required']"
+          :rules="[(v) => !!v || 'Login is required']"
         ></v-text-field>
 
         <v-text-field
@@ -24,7 +24,7 @@
           prepend-icon="mdi-lock"
           type="password"
           required
-          :rules="[v => !!v || 'Password is required']"
+          :rules="[(v) => !!v || 'Password is required']"
         ></v-text-field>
       </v-form>
     </v-card-text>

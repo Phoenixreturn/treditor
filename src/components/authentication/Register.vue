@@ -1,11 +1,7 @@
 <template>
   <div class="col-md-12">
     <div class="card card-container">
-      <img
-        id="profile-img"
-        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-        class="profile-img-card"
-      />
+      <img id="profile-img" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" class="profile-img-card" />
       <form name="form" @submit.prevent="handleRegister">
         <div v-if="!successful">
           <div class="form-group">
@@ -17,10 +13,7 @@
               class="form-control"
               name="username"
             />
-            <div
-              v-if="submitted && errors.has('username')"
-              class="alert-danger"
-            >{{errors.first('username')}}</div>
+            <div v-if="submitted && errors.has('username')" class="alert-danger">{{ errors.first("username") }}</div>
           </div>
           <div class="form-group">
             <label for="email">Email</label>
@@ -31,10 +24,7 @@
               class="form-control"
               name="email"
             />
-            <div
-              v-if="submitted && errors.has('email')"
-              class="alert-danger"
-            >{{errors.first('email')}}</div>
+            <div v-if="submitted && errors.has('email')" class="alert-danger">{{ errors.first("email") }}</div>
           </div>
           <div class="form-group">
             <label for="password">Password</label>
@@ -45,10 +35,7 @@
               class="form-control"
               name="password"
             />
-            <div
-              v-if="submitted && errors.has('password')"
-              class="alert-danger"
-            >{{errors.first('password')}}</div>
+            <div v-if="submitted && errors.has('password')" class="alert-danger">{{ errors.first("password") }}</div>
           </div>
           <div class="form-group">
             <button class="btn btn-primary btn-block">Sign Up</button>
@@ -56,42 +43,36 @@
         </div>
       </form>
 
-      <div
-        v-if="message"
-        class="alert"
-        :class="successful ? 'alert-success' : 'alert-danger'"
-      >{{message}}</div>
+      <div v-if="message" class="alert" :class="successful ? 'alert-success' : 'alert-danger'">{{ message }}</div>
     </div>
   </div>
 </template>
 
 <script>
-import User from '../../models/user'
+import User from "../../models/user"
 
 export default {
-  name: 'Register',
+  name: "Register",
   data() {
     return {
-      user: new User('', '', ''),
+      user: new User("", "", ""),
       submitted: false,
       successful: false,
-      message: ''
-    };
+      message: "",
+    }
   },
   computed: {
     loggedIn() {
-      return this.$store.state.auth.status.loggedIn;
-    }
+      return this.$store.state.auth.status.loggedIn
+    },
   },
   mounted() {
     if (this.loggedIn) {
-      this.$router.push('/profile');
+      this.$router.push("/profile")
     }
   },
-  methods: {
- 
-  }
-};
+  methods: {},
+}
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
 <template>
   <v-card class="elevation-12">
-      <v-toolbar color="primary" dark flat>
+    <v-toolbar color="primary" dark flat>
       <v-toolbar-title>Registration form</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
@@ -13,7 +13,7 @@
           prepend-icon="mdi-account"
           type="text"
           required
-          :rules="[v => !!v || 'Login is required']"
+          :rules="[(v) => !!v || 'Login is required']"
         ></v-text-field>
         <v-text-field
           id="email"
@@ -23,7 +23,7 @@
           prepend-icon="mdi-email"
           type="email"
           required
-          :rules="[v => !!v || 'Email is required']"
+          :rules="[(v) => !!v || 'Email is required']"
         ></v-text-field>
         <v-text-field
           id="password"
@@ -33,7 +33,7 @@
           prepend-icon="mdi-lock"
           type="password"
           required
-          :rules="[v => !!v || 'Password is required']"
+          :rules="[(v) => !!v || 'Password is required']"
         ></v-text-field>
       </v-form>
     </v-card-text>
