@@ -1,8 +1,9 @@
 import { v1 as uuidv1 } from 'uuid';
+const mongoose = require("mongoose");
 
 class Shape {
-    id = uuidv1()
-    name = 'shape' + uuidv1()
+    id = new mongoose.Types.ObjectId().toHexString()
+    name = 'shape' + this.id
     x = this.getRandomInt(100)
     y = this.getRandomInt(100)
     rotation = 0

@@ -130,11 +130,12 @@ export default {
       gridLayer: null,
       suckerArea: [],
       isSucking: false,
-      shapes: [],
       displayValue: "none",
       opacityValue: "60%",
       editable: true,
       showMenu: false,
+      shapes: [],
+      projectId: null,
       propertiesType: "PropertiesPanel",
       items: [
         {
@@ -225,13 +226,15 @@ export default {
   },
   mounted: function() {
     var this_ptr = this;
-    this.$root.$on('openProject', data => {
-      console.log('opened project ########################################')
+    this.$root.$on('open-project', data => {
+      this.projectId = data.objectId
+      WhiteBoardService.getProject(this.projectId).then(response => {
+        this.shapes = response.data.shapes;
+      })
     })
 
-    this.$root.$on('saveProject', (data) => {
-      console.log('saved project ########################')
-      WhiteBoardService.saveProject(this_ptr.shapes);
+    this.$root.$on('save-project', (data) => {
+      WhiteBoardService.updateProject(this.projectId, this.shapes)
     })
       UserService.getPublicContent().then(
       response => {

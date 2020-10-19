@@ -1,9 +1,6 @@
 <template>
   <v-app>
     <v-navigation-drawer app expand-on-hover permanent :color="color">
-       <dlg-wrapper ref="dlg">
-          <dlg-frame title="Dialog" message="Message"></dlg-frame>
-        </dlg-wrapper>
       <template v-slot:prepend>
         <v-list-item two-line>
           <v-list-item-avatar>
@@ -19,9 +16,11 @@
 
       <v-divider></v-divider>
 
-      <dlg-wrapper ref="dlg">
-          <dlg-frame title="Dialog" message="Message"></dlg-frame>
-      </dlg-wrapper>
+      <dialog-wrapper ref="dlg">
+        <template v-slot={vis}>
+          <component v-bind:is="currentFrame" v-bind:dialogVisible=vis></component>
+        </template>          
+      </dialog-wrapper>
 
       <v-list dense>
         <v-list-item v-for="item in items" :key="item.title" :to="item.link" link>
@@ -62,18 +61,21 @@
 <script>
 import Vue from "vue"
 import SvgSprite from "../assets/sprite.svg"
-import DlgWrapper from "@/components/whiteboard/DlgWrapper";
-import DlgFrame from "@/components/whiteboard/DlgFrame";
+import DialogWrapper from "@/components/whiteboard/dialogs/DialogWrapper"
+import CreateProjectFrame from "@/components/whiteboard/dialogs/CreateProjectFrame"
+import OpenProjectFrame from '@/components/whiteboard/dialogs/OpenProjectFrame'
 
 export default {
   name: "Treditor",
   components: {
     SvgSprite,
-    DlgWrapper,
-    DlgFrame
+    DialogWrapper,
+    CreateProjectFrame,
+    OpenProjectFrame
   },
   data() {
     return {
+      currentFrame: 'OpenProjectFrame',
       color: "background",
       items: [
         { title: "Home", icon: "mdi-home-city", link: "stage" },
@@ -83,32 +85,38 @@ export default {
       ],
       menuItems: [
         { title: "Open", action: "open" },
-        { title: "Save", action: "save" }
+        { title: "Save", action: "save" },
+        { title: "Create", action: "create" },
+        { title: "Close", action: "close" }
       ]
     }
   },
   methods: {
-    clickedOnFIle(event, item) {
-      console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$' + item.link)
-    },
     do_action: function(item) {
       switch(item.action) {
         case 'open':
-          this.open_dialog();
+          this.open_dialog()
           break;
-        case 'save':
-          this.$root.$emit('saveProject')
+        case 'save':       
+          this.$root.$emit('save-project')
+          break;
+        case 'create':
+          this.currentFrame = 'CreateProjectFrame'
+          this.open_dialog()
+          this.$root.$emit('create-project')
+          break;
+        case 'close':
+          this.$root.$emit('close-project')
           break;
         default:
           break;
       }
-
     },
     open_dialog: function() {
       this.$refs.dlg.open().then(result => {
         console.log('Result: ', result)
       })
-  }
+    }
   },
 }
 </script>

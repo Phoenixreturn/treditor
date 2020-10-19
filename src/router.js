@@ -6,7 +6,6 @@ import OnboardComponent from './components/onboarding/Onboarding.vue'
 import RegisterComponent from './components/onboarding/Register.vue'
 import ProfileComponent from './components/onboarding/Profile.vue'
 import MainComponent from './components/Treditor.vue'
-import LearnComponent from './components/learning/LearnComponent'
 
 Vue.use(VueRouter)
 
@@ -22,7 +21,6 @@ const routes = [
           { path: 'test', component: TestComponent},
       ] 
     },
-    { path: '/learning', component: LearnComponent},
     { path: '/onboarding', component: OnboardComponent },
     { path: '/register', component: RegisterComponent },
     { path: '/profile', component: ProfileComponent },
