@@ -2,9 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import WhiteBoard from './components/whiteboard/WhiteBoard.vue'
 import TestComponent from './components/jsoneditor/Editor.vue'
-import OnboardComponent from './components/onboarding/Onboarding.vue'
-import RegisterComponent from './components/onboarding/Register.vue'
-import ProfileComponent from './components/onboarding/Profile.vue'
+import OnboardComponent from './components/authentication/Onboarding.vue'
+import RegisterComponent from './components/authentication/Register.vue'
+import ProfileComponent from './components/authentication/Profile.vue'
 import MainComponent from './components/Treditor.vue'
 
 Vue.use(VueRouter)

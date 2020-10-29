@@ -49,9 +49,9 @@
     </v-app-bar>
 
     <!-- Sizes your content based upon application components -->
-    <v-content>
+    <v-main>
       <router-view></router-view>
-    </v-content>
+    </v-main>
     <v-footer app>
       <SvgSprite class="sprite"></SvgSprite>
     </v-footer>
