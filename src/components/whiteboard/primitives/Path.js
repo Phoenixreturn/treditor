@@ -1,9 +1,9 @@
-import NonCircle from './NonCircle'
+import NonCircle from './NonCircle';
 
 class Path extends NonCircle {
-    type = 'vPath'
-    stroke = 'cyan'
-    data = 'M 50 50 L 100 90'
+  type = 'vPath';
+  stroke = 'cyan';
+  data = 'M 50 50 L 100 90';
 }
 
-export default Path
+export default Path;

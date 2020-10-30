@@ -18,25 +18,24 @@
       @page-change="pageChanged"
       @selection-change="changedSelection"
     >
-   <template slot="shapeType" slot-scope="props">
-         <v-icon>$vuetify.icons.label</v-icon>
-            </template>
+      <template slot="shapeType">
+        <v-icon>$vuetify.icons.label</v-icon>
+      </template>
     </vue-ads-table>
   </div>
 </template>
 
 <script>
-import Vue from "vue"
 // import JsonEditor from "../treeview"
-import MyEditor from "../jsoneditor/Editor.vue"
-import { VueAdsTable } from "vue-ads-table-tree"
+import MyEditor from '../jsoneditor/Editor.vue';
+import { VueAdsTable } from 'vue-ads-table-tree';
 // Vue.use(MyEditor)
 
 export default {
-  name: "PropertiesPanel",
+  name: 'PropertiesPanel',
   components: {
     VueAdsTable,
-    MyEditor
+    MyEditor,
   },
   props: {
     currentObject: {
@@ -45,62 +44,64 @@ export default {
     },
     items: {
       type: Array,
-      default: function() {
-        return []
-      }
-    }
+      default: function () {
+        return [];
+      },
+    },
   },
-  data: function() {
+  data: function () {
     return {
       page: 0,
-      filter: "",
+      filter: '',
       columns: [
         {
-          property: "id",
-          title: "#",
+          property: 'id',
+          title: '#',
           direction: null,
-          sortable: false
+          sortable: false,
         },
         {
-          property: "type",
-          title: "Shape ID",
+          property: 'type',
+          title: 'Shape ID',
           direction: null,
           filterable: true,
-          collapseIcon: true
-        }
+          collapseIcon: true,
+        },
       ],
-    }
+    };
   },
 
   methods: {
     filterChanged(filter) {
-      this.filter = filter
+      this.filter = filter;
     },
 
     pageChanged(page) {
-      this.page = page
+      this.page = page;
     },
-    changedSelection(selectedItems) {
-      console.log('################# ')
-    }
+    changedSelection() {
+      console.log('################# ');
+    },
   },
   computed: {
     selectedObject: {
-      get: function() {
-        return this.currentObject
+      get: function () {
+        return this.currentObject;
       },
-      set: function(currentObject) {
+      set: function (currentObject) {
         if (this.currentObject.id === currentObject.id) {
           for (var propertyName in currentObject) {
-            if (this.currentObject[propertyName] !== currentObject[propertyName]) {
-              this.currentObject[propertyName] = currentObject[propertyName]
+            if (
+              this.currentObject[propertyName] !== currentObject[propertyName]
+            ) {
+              this.currentObject[propertyName] = currentObject[propertyName];
             }
           }
         }
-      }
-    }
-  }
-}
+      },
+    },
+  },
+};
 </script>
 
 <style scoped>

@@ -1,8 +1,8 @@
 const types = {
-    CIRCLE: 'circle',
-    RECTANGLE: 'rectangle',
-    POLYLINE: 'polyLine',
-    TEXTLABEL: 'textLabel'
-}
+  CIRCLE: 'circle',
+  RECTANGLE: 'rectangle',
+  POLYLINE: 'polyLine',
+  TEXTLABEL: 'textLabel',
+};
 
 export default types;

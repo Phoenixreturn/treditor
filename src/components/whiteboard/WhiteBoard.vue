@@ -3,7 +3,7 @@
     <v-row align="center" class="ma-0 pa-0 ttttttt firstRow">
       <TopPanel @create="createComponent"></TopPanel>
     </v-row>
-    <v-row class="ma-0 pa-0 ttttttt" style="height:92%">
+    <v-row class="ma-0 pa-0 ttttttt" style="height: 92%">
       <v-col class="ma-0 pa-0" v-if="items1.length > 0" :cols="2">
         <v-card class="rounded-0">
           <v-tabs v-model="tab" background-color="primary" dark>
@@ -47,7 +47,7 @@
               @mousemove="whileCreating($event)"
               @mouseup="endCreating($event)"
               @click="eventHandlerContextMenu($event, on)"
-              style="background: #dfffff; height:100%"
+              style="background: #dfffff; height: 100%"
             >
               <v-layer ref="gridLayer"></v-layer>
               <v-layer ref="layerEl">
@@ -111,13 +111,13 @@
       >
         <v-btn id="leftBtn" icon width="200" height="200">
           <LeftArrow
-            style="width:200px;height:200px;transform:rotate(180deg)"
+            style="width: 200px; height: 200px; transform: rotate(180deg)"
           ></LeftArrow>
         </v-btn>
       </draggable>
 
       <v-btn id="rightBtn" style="margin: 10%" icon width="200" height="200">
-        <RightArrow style="width:200px;height:200px"></RightArrow>
+        <RightArrow style="width: 200px; height: 200px"></RightArrow>
       </v-btn>
     </div>
   </v-container>
@@ -126,7 +126,6 @@
 <script>
 import Vue from 'vue';
 import Konva from 'konva';
-import axios from 'axios';
 import TopPanel from './TopPanel';
 import StubTab from './StubTab';
 import PropertiesPanel from './PropertiesPanel';
@@ -245,16 +244,15 @@ export default {
     },
   },
   watch: {
-    selectedObj: function(val) {
+    selectedObj: function (val) {
       this.selectedObj = val;
       this.items2[0].objProps = this.propTab;
     },
   },
-  created: function() {
+  created: function () {
     this.items2[0].objProps = this.propTab;
   },
-  mounted: function() {
-    var this_ptr = this;
+  mounted: function () {
     this.$root.$on('open-project', (data) => {
       this.projectId = data.objectId;
       WhiteBoardService.getProject(this.projectId).then((response) => {
@@ -262,7 +260,7 @@ export default {
       });
     });
 
-    this.$root.$on('save-project', (data) => {
+    this.$root.$on('save-project', () => {
       WhiteBoardService.updateProject(this.projectId, this.shapes);
     });
     UserService.getPublicContent().then(
@@ -291,8 +289,8 @@ export default {
       });
     });
   },
-  updated: function() {
-    this.$nextTick(function() {
+  updated: function () {
+    this.$nextTick(function () {
       const height = this.$refs.stageEl.$el.clientHeight;
       const width = this.$refs.stageEl.$el.clientWidth;
       this.stageSize.width = width;
@@ -350,7 +348,7 @@ export default {
     showCurtain() {
       this.displayValue = 'flex';
     },
-    checkMove(evt) {
+    checkMove() {
       return true;
     },
     eventHandlerContextMenu(event, on) {
@@ -453,7 +451,7 @@ export default {
       this.$refs.layerEl.getNode().add(anchor.getNode());
       anchor.$parent = this.$refs.layerEl;
       anchor.getNode().on('transformend', this.handleTransformEnd);
-      anchor.getNode().on('dragend', (e) => {
+      anchor.getNode().on('dragend', () => {
         anchor.getNode().position({
           x: this.getGridSize(anchor.getNode().x()),
           y: this.getGridSize(anchor.getNode().y()),
@@ -462,7 +460,7 @@ export default {
       });
       anchor.$mount();
       var self = this;
-      return function() {
+      return function () {
         if (item === 'Start to Draw Line') {
           var startPoint = self.$refs.stageEl.getNode().getPointerPosition();
           self.$refs.stageEl
@@ -479,7 +477,7 @@ export default {
     },
     drawLineMouseMove(startPoint, line) {
       var self = this;
-      return function(e) {
+      return function (e) {
         var endPoint = self.$refs.stageEl.getNode().getPointerPosition();
         var pp = [];
         pp.push(startPoint.x);
@@ -525,7 +523,7 @@ export default {
         e.target.stopDrag();
       }
     },
-    dragEndEvent(e) {
+    dragEndEvent() {
       console.log('dragEndEvent');
       //   anchor.getNode().position({
       //     x: this.getGridSize(anchor.getNode().x()),
