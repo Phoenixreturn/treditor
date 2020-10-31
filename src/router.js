@@ -49,15 +49,22 @@ const routes = [
 const router = new VueRouter({
   routes,
 });
-// router.beforeEach((to, from, next) => {
-//   const loggedIn = localStorage.getItem('user');
-
-//   if (!loggedIn && LOGIN_PATH !== to.path) {
-//     console.log("Redirect to onboarding page $$$")
-//     next('/onboarding');
-//   } else {
-//     next();
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    // этот путь требует авторизации, проверяем залогинен ли
+    // пользователь, и если нет, перенаправляем на страницу логина
+    const loggedIn = localStorage.getItem('user');
+    if (!loggedIn) {
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath },
+      });
+    } else {
+      next();
+    }
+  } else {
+    next(); // всегда так или иначе нужно вызвать next()!
+  }
+});
 
 export default router;
