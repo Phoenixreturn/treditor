@@ -133,8 +133,6 @@ import ShapeFactory from './primitives/ShapeFactory';
 import draggable from 'vuedraggable';
 import LeftArrow from '../../assets/left_arrow.svg';
 import RightArrow from '../../assets/right_arrow.svg';
-
-import UserService from '../../services/user.service';
 import WhiteBoardService from '../../services/whiteboard.service';
 
 import operations from '../../store/operation.types';
@@ -263,18 +261,6 @@ export default {
     this.$root.$on('save-project', () => {
       WhiteBoardService.updateProject(this.projectId, this.shapes);
     });
-    UserService.getPublicContent().then(
-      (response) => {
-        this.content = response.data;
-      },
-      (error) => {
-        console.log('UserService ####');
-        this.content =
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString();
-      }
-    );
     this.$nextTick(() => {
       let this_ptr = this;
       window.addEventListener('resize', () => {
