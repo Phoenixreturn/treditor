@@ -58,4 +58,9 @@ export const auth = {
       state.status.loggedIn = false;
     },
   },
+  getters: {
+    loggedUser: state => {
+      return state.user;
+    }
+  }
 };

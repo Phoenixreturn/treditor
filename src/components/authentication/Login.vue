@@ -68,7 +68,8 @@ export default {
       if (this.$refs.loginForm.validate()) {
         this.$store.dispatch('auth/login', this.user).then(
           () => {
-            this.$router.push('/profile');
+            // this.$router.push('/profile');
+            this.$router.push('/');
           },
           (error) => {
             this.loading = false;

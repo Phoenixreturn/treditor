@@ -13,7 +13,7 @@ const routes = [
     path: '/',
     component: WelcomeWindow,
     meta: {
-      requiresAuth: false,
+      requiresAuth: true,
     },
   },
   {

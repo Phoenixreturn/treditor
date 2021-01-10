@@ -71,6 +71,7 @@ export default {
   methods: {
     openProject: function () {
       this.$root.$emit('open-project', this.selected[0]);
+      this.$router.push('/whiteboard');
       this.agree();
     },
   },

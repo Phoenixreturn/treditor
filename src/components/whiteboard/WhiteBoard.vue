@@ -15,7 +15,7 @@
               <draggable
                 v-model="items1"
                 v-bind="{ ghostClass: 'movClass' }"
-                @start="showCurtain"
+                @start="showCurtain(event)"
                 :move="checkMove"
                 :options="{ group: 'people' }"
               >
@@ -150,7 +150,7 @@ export default {
   },
   data() {
     return {
-      selectedObj: null,
+      selectedObj: {},
       content: '### stub ###',
       color: '#59c7f9',
       suckerCanvas: null,

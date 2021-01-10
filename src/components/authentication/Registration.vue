@@ -42,6 +42,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
+            <v-btn color="secondary" @click="backToWelcome">Cancel</v-btn>
             <v-btn color="secondary" @click="handleRegister">Register</v-btn>
           </v-card-actions>
         </v-card>
@@ -64,6 +65,9 @@ export default {
     };
   },
   methods: {
+    backToWelcome() {
+      this.$router.push('/')
+    },
     handleRegister() {
       this.message = '';
       this.submitted = true;

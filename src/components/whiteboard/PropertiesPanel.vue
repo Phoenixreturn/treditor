@@ -8,7 +8,7 @@
       :objData="selectedObject"
       v-model="selectedObject"
     ></JsonEditor> -->
-    <MyEditor v-if="selectedObject != null" :obj="selectedObject"></MyEditor>
+    <MyEditor v-if="selectedObject != null && Object.keys(selectedObject).length > 0" :obj="selectedObject"></MyEditor>
     <vue-ads-table
       :columns="columns"
       :rows="items"

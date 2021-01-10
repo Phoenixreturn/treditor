@@ -26,6 +26,10 @@ class WhiteBoardService {
   getProject(projectId) {
     return httpClient.get('projects/' + projectId);
   }
+
+  createProject(projectName) {
+    return httpClient.post('projects/' + projectName, {});
+  }
 }
 
 export default new WhiteBoardService();

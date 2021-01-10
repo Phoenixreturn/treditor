@@ -17,18 +17,23 @@
 
     <v-spacer></v-spacer>
 
-    <v-menu offset-y>
+    <v-menu v-if="user" offset-y>
       <template v-slot:activator="{ on }">
         <v-list-item-avatar v-on="on">
           <v-icon x-large>mdi-login</v-icon>
         </v-list-item-avatar>
       </template>
-      <v-list-item two-line>
-        <v-list-item-content>
-          <v-list-item-title>Robert Gallyamov</v-list-item-title>
-          <v-list-item-subtitle>Logged In</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
+      <v-list>
+        <v-list-item>
+          <v-list-item-title>{{ this.user.username }}</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="moveToProfilePage">
+          <v-list-item-title>Your profile</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="logOut">
+          <v-list-item-title>Sign out</v-list-item-title>
+        </v-list-item>
+      </v-list>
     </v-menu>
 
     <dialog-wrapper ref="dlg">
@@ -43,12 +48,12 @@
 </template>
 
 <script>
-import DialogWrapper from '@/components/dialogs/DialogWrapper';
-import CreateProjectFrame from '@/components/dialogs/CreateProjectFrame';
-import OpenProjectFrame from '@/components/dialogs/OpenProjectFrame';
+import DialogWrapper from "@/components/dialogs/DialogWrapper";
+import CreateProjectFrame from "@/components/dialogs/CreateProjectFrame";
+import OpenProjectFrame from "@/components/dialogs/OpenProjectFrame";
 
 export default {
-  name: 'Header',
+  name: "Header",
   components: {
     DialogWrapper,
     CreateProjectFrame,
@@ -57,31 +62,43 @@ export default {
   data() {
     return {
       menuItems: [
-        { title: 'New', action: 'create', icon: 'mdi-new' },
-        { title: 'Open', action: 'open', icon: 'mdi-book-open' },
-        { title: 'Save', action: 'save', icon: 'mdi-save' },
-        { title: 'Close', action: 'close', icon: 'mdi-close' },
+        { title: "New", action: "create", icon: "mdi-new" },
+        { title: "Open", action: "open", icon: "mdi-book-open" },
+        { title: "Save", action: "save", icon: "mdi-save" },
+        { title: "Close", action: "close", icon: "mdi-close" },
       ],
-      currentFrame: 'OpenProjectFrame',
+      currentFrame: "OpenProjectFrame",
     };
   },
-
+  computed: {
+    user() {
+      return this.$store.getters["auth/loggedUser"];
+    },
+  },
   methods: {
+    logOut: function () {
+      this.$store.dispatch('auth/logout')
+      this.$router.go();
+    },
+    moveToProfilePage: function () {
+      this.$router.push("/profile");
+    },
     do_action: function (item) {
       switch (item.action) {
-        case 'open':
+        case "open":
+          this.currentFrame = "OpenProjectFrame";
           this.open_dialog();
           break;
-        case 'save':
-          this.$root.$emit('save-project');
+        case "save":
+          this.$root.$emit("save-project");
           break;
-        case 'create':
-          this.currentFrame = 'CreateProjectFrame';
+        case "create":
+          this.currentFrame = "CreateProjectFrame";
           this.open_dialog();
-          this.$root.$emit('create-project');
+          this.$root.$emit("create-project");
           break;
-        case 'close':
-          this.$root.$emit('close-project');
+        case "close":
+          this.$root.$emit("close-project");
           break;
         default:
           break;
@@ -89,7 +106,7 @@ export default {
     },
     open_dialog: function () {
       this.$refs.dlg.open().then((result) => {
-        console.log('Result: ', result);
+        console.log("Result: ", result);
       });
     },
   },
