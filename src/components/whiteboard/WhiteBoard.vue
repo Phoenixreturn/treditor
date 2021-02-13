@@ -15,9 +15,10 @@
               <draggable
                 v-model="items1"
                 v-bind="{ ghostClass: 'movClass' }"
-                @start="showCurtain(event)"
+                @start="showCurtain"
+                @end="displayValue = 'none'"
                 :move="checkMove"
-                :options="{ group: 'people' }"
+                :options="{ group: 'people', revertOnSpill: true }"
               >
                 <transition-group>
                   <component
@@ -84,8 +85,12 @@
           v-bind="{ ghostClass: 'movClass' }"
           @start="showCurtain"
           @end="displayValue = 'none'"
-          :move="checkMove"
-          :options="{ group: 'people' }"
+          :move="(event) => highlightTarget(event, 'dropArea')"
+          :options="{
+            group: 'people',
+            revertOnSpill: true,
+            onSpill: (event) => onSpill(event, 'spill'),
+          }"
         >
           <transition-group>
             <component
@@ -105,8 +110,10 @@
     >
       <draggable
         v-model="items1"
-        :options="{ group: 'people' }"
-        :move="checkMove"
+        ref="dropArea"
+        :class="{ targeted: targetedArea === 'dropArea' }"
+        v-bind="{ ghostClass: 'movClass' }"
+        :options="{ group: 'people', revertOnSpill: true }"
         style="margin: 10%"
       >
         <v-btn id="leftBtn" icon width="200" height="200">
@@ -116,30 +123,39 @@
         </v-btn>
       </draggable>
 
-      <v-btn id="rightBtn" style="margin: 10%" icon width="200" height="200">
-        <RightArrow style="width: 200px; height: 200px"></RightArrow>
-      </v-btn>
+      <draggable
+        v-model="items2"
+        ref="dropArea"
+        :class="{ targeted: targetedArea === 'dropArea' }"
+        v-bind="{ ghostClass: 'movClass' }"
+        :options="{ group: 'people', revertOnSpill: true }"
+        style="margin: 10%"
+      >
+        <v-btn id="rightBtn" style="margin: 10%" icon width="200" height="200">
+          <RightArrow style="width: 200px; height: 200px"></RightArrow>
+        </v-btn>
+      </draggable>
     </div>
   </v-container>
 </template>
 
 <script>
-import Vue from 'vue';
-import Konva from 'konva';
-import TopPanel from './TopPanel';
-import StubTab from './StubTab';
-import PropertiesPanel from './PropertiesPanel';
-import ShapeFactory from './primitives/ShapeFactory';
-import draggable from 'vuedraggable';
-import LeftArrow from '../../assets/left_arrow.svg';
-import RightArrow from '../../assets/right_arrow.svg';
-import WhiteBoardService from '../../services/whiteboard.service';
+import Vue from "vue";
+import Konva from "konva";
+import TopPanel from "./TopPanel";
+import StubTab from "./StubTab";
+import PropertiesPanel from "./PropertiesPanel";
+import ShapeFactory from "./primitives/ShapeFactory";
+import draggable from "vuedraggable";
+import LeftArrow from "../../assets/left_arrow.svg";
+import RightArrow from "../../assets/right_arrow.svg";
+import WhiteBoardService from "../../services/whiteboard.service";
 
-import operations from '../../store/operation.types';
-import primitives from './primitives/primitive.type';
+import operations from "../../store/operation.types";
+import primitives from "./primitives/primitive.type";
 
 export default {
-  name: 'WhiteBoard',
+  name: "WhiteBoard",
   components: {
     TopPanel,
     PropertiesPanel,
@@ -150,25 +166,26 @@ export default {
   },
   data() {
     return {
+      targetedArea: null,
       selectedObj: {},
-      content: '### stub ###',
-      color: '#59c7f9',
+      content: "### stub ###",
+      color: "#59c7f9",
       suckerCanvas: null,
       suckerArea: [],
       isSucking: false,
-      displayValue: 'none',
-      opacityValue: '60%',
+      displayValue: "none",
+      opacityValue: "60%",
       editable: true,
       showMenu: false,
       shapes: [],
       projectId: null,
-      propertiesType: 'PropertiesPanel',
+      propertiesType: "PropertiesPanel",
       items: [
         {
-          title: 'Start to Draw Line',
+          title: "Start to Draw Line",
         },
         {
-          title: 'End to Draw Line',
+          title: "End to Draw Line",
         },
       ],
       gridSize: 40,
@@ -177,38 +194,13 @@ export default {
         height: 500,
       },
       tab: null,
-      items1: [
-        {
-          tab: 'One',
-          id: 'One',
-          objProps: {
-            content: 'Tab 1 Content',
-          },
-          type: 'StubTab',
-        },
-        {
-          tab: 'Two',
-          id: 'Two',
-          objProps: {
-            content: 'Tab 2 Content',
-          },
-          type: 'StubTab',
-        },
-        {
-          tab: 'Three',
-          id: 'Three',
-          objProps: {
-            content: 'Tab 3 Content',
-          },
-          type: 'StubTab',
-        },
-      ],
+      items1: [],
       items2: [
         {
-          tab: 'Four',
-          id: 'Four',
+          tab: "Four",
+          id: "Four",
           objProps: {},
-          type: 'PropertiesPanel',
+          type: "PropertiesPanel",
         },
       ],
     };
@@ -235,9 +227,9 @@ export default {
     dragOptions() {
       return {
         animation: 0,
-        group: 'description',
+        group: "description",
         disabled: !this.editable,
-        ghostClass: 'ghost',
+        ghostClass: "ghost",
       };
     },
   },
@@ -251,26 +243,26 @@ export default {
     this.items2[0].objProps = this.propTab;
   },
   mounted: function () {
-    this.$root.$on('open-project', (data) => {
+    this.$root.$on("open-project", (data) => {
       this.projectId = data.objectId;
       WhiteBoardService.getProject(this.projectId).then((response) => {
         this.shapes = response.data.shapes;
       });
     });
 
-    this.$root.$on('save-project', () => {
+    this.$root.$on("save-project", () => {
       WhiteBoardService.updateProject(this.projectId, this.shapes);
     });
     this.$nextTick(() => {
       let this_ptr = this;
-      window.addEventListener('resize', () => {
+      window.addEventListener("resize", () => {
         const height = this_ptr.$refs.stageEl.$el.clientHeight;
         const width = this_ptr.$refs.stageEl.$el.clientWidth;
         this_ptr.stageSize.width = width;
         this_ptr.stageSize.height = height;
         this_ptr.$refs.gridLayer.getNode().draw();
         console.log(
-          '############### Window resize event #######################'
+          "############### Window resize event #######################"
         );
       });
     });
@@ -299,7 +291,7 @@ export default {
               Math.round(i * padding) + 0.5,
               this.stageSize.height,
             ],
-            stroke: '#ddd',
+            stroke: "#ddd",
             strokeWidth: 2,
           })
         );
@@ -319,7 +311,7 @@ export default {
               this.stageSize.width,
               Math.round(j * padding),
             ],
-            stroke: '#ddd',
+            stroke: "#ddd",
             strokeWidth: 2,
           })
         );
@@ -328,21 +320,44 @@ export default {
     });
   },
   methods: {
+    onSpill(event, str) {
+      console.log(str);
+      console.log(event);
+    },
+    funcLog(event, str) {
+      console.log(str);
+      console.log(event);
+    },
+    highlightTarget(event, oppositeAreaName) {
+      console.log("check move");
+      if (event.relatedContext.component === this.$refs[oppositeAreaName]) {
+        this.targetedArea = oppositeAreaName;
+      } else {
+        this.targetedArea = null;
+      }
+    },
+    updateEvent(event) {
+      console.log(event);
+    },
+    onDragEvent(event) {
+      console.log(event);
+    },
     changeCurtain() {
-      this.displayValue = 'none';
+      this.displayValue = "none";
     },
     showCurtain() {
-      this.displayValue = 'flex';
+      this.displayValue = "flex";
     },
     checkMove() {
+      console.log("check move");
       return true;
     },
     eventHandlerContextMenu(event, on) {
       // это нужно каким то боком нужно для контекстного меню
-      on['click'](event.evt);
+      on["click"](event.evt);
     },
     startCreating(event) {
-      console.log('startCreating');
+      console.log("startCreating");
       if (this.$store.state.event.type == operations.CREATE) {
         if (
           this.$store.state.event.primitive == primitives.RECTANGLE ||
@@ -361,7 +376,7 @@ export default {
       }
     },
     whileCreating(event) {
-      console.log('whileCreating');
+      console.log("whileCreating");
       if (this.$store.state.event.type == operations.CREATING) {
         let startX = this.$store.state.event.startPoint.x;
         let startY = this.$store.state.event.startPoint.y;
@@ -378,23 +393,23 @@ export default {
           if (this.$store.state.event.primitive == primitives.RECTANGLE) {
             this.$set(
               this.$store.state.event.createdPrimitve,
-              'width',
+              "width",
               initWidth
             );
             this.$set(
               this.$store.state.event.createdPrimitve,
-              'height',
+              "height",
               initHeight
             );
           } else if (this.$store.state.event.primitive == primitives.CIRCLE) {
             let rad = Math.max(Math.abs(initWidth), Math.abs(initHeight));
-            this.$set(this.$store.state.event.createdPrimitve, 'radius', rad);
+            this.$set(this.$store.state.event.createdPrimitve, "radius", rad);
           }
         }
       }
     },
     endCreating(event) {
-      console.log('endCreating');
+      console.log("endCreating");
       if (this.$store.state.event.createdPrimitve != null) {
         if (this.$store.state.event.type == operations.CREATING) {
           let startX = this.$store.state.event.startPoint.x;
@@ -404,17 +419,17 @@ export default {
           if (this.$store.state.event.primitive == primitives.RECTANGLE) {
             this.$set(
               this.$store.state.event.createdPrimitve,
-              'width',
+              "width",
               finalWidth
             );
             this.$set(
               this.$store.state.event.createdPrimitve,
-              'height',
+              "height",
               finalHeight
             );
           } else if (this.$store.state.event.primitive == primitives.CIRCLE) {
             let rad = Math.max(Math.abs(finalWidth), Math.abs(finalHeight));
-            this.$set(this.$store.state.event.createdPrimitve, 'radius', rad);
+            this.$set(this.$store.state.event.createdPrimitve, "radius", rad);
           }
           this.$store.state.event.createdPrimitve = null;
           this.$store.state.event.type = operations.CREATE;
@@ -422,9 +437,9 @@ export default {
       }
     },
     handleListClick(item) {
-      var kShape = Vue.component('vLine');
+      var kShape = Vue.component("vLine");
       const line = {
-        stroke: 'green',
+        stroke: "green",
         id: `line123`,
         name: `line123`,
       };
@@ -436,8 +451,8 @@ export default {
       });
       this.$refs.layerEl.getNode().add(anchor.getNode());
       anchor.$parent = this.$refs.layerEl;
-      anchor.getNode().on('transformend', this.handleTransformEnd);
-      anchor.getNode().on('dragend', () => {
+      anchor.getNode().on("transformend", this.handleTransformEnd);
+      anchor.getNode().on("dragend", () => {
         anchor.getNode().position({
           x: this.getGridSize(anchor.getNode().x()),
           y: this.getGridSize(anchor.getNode().y()),
@@ -447,16 +462,16 @@ export default {
       anchor.$mount();
       var self = this;
       return function () {
-        if (item === 'Start to Draw Line') {
+        if (item === "Start to Draw Line") {
           var startPoint = self.$refs.stageEl.getNode().getPointerPosition();
           self.$refs.stageEl
             .getNode()
             .on(
-              'mousemove',
+              "mousemove",
               self.drawLineMouseMove(startPoint, anchor.getNode())
             );
-        } else if (item === 'End to Draw Line') {
-          self.$refs.stageEl.getNode().off('mousemove');
+        } else if (item === "End to Draw Line") {
+          self.$refs.stageEl.getNode().off("mousemove");
           console.log(item);
         }
       };
@@ -479,7 +494,7 @@ export default {
       if (this.selectedObj) {
         this.selectedObj.x = this.getGridSize(e.target.attrs.x);
         this.selectedObj.y = this.getGridSize(e.target.attrs.y);
-        if (this.selectedObj.type !== 'vCircle') {
+        if (this.selectedObj.type !== "vCircle") {
           this.selectedObj.width = this.getGridSize(e.target.attrs.width);
           this.selectedObj.height = this.getGridSize(e.target.attrs.height);
         } else {
@@ -504,13 +519,13 @@ export default {
       return shape;
     },
     dragStartEvent(e) {
-      console.log('dragStartEvent');
+      console.log("dragStartEvent");
       if (!e.evt.ctrlKey) {
         e.target.stopDrag();
       }
     },
     dragEndEvent() {
-      console.log('dragEndEvent');
+      console.log("dragEndEvent");
       //   anchor.getNode().position({
       //     x: this.getGridSize(anchor.getNode().x()),
       //     y: this.getGridSize(anchor.getNode().y())
@@ -527,7 +542,7 @@ export default {
 
       // clicked on transformer - do nothing
       const clickedOnTransformer =
-        e.target.getParent().className === 'Transformer';
+        e.target.getParent().className === "Transformer";
       if (clickedOnTransformer) {
         return;
       }
@@ -547,7 +562,7 @@ export default {
       const transformerNode = this.$refs.transformer.getNode();
       const stage = transformerNode.getStage();
 
-      const selectedNode = stage.findOne('.' + this.selectedObj.name);
+      const selectedNode = stage.findOne("." + this.selectedObj.name);
       // do nothing if selected node is already attached
       if (selectedNode === transformerNode.node()) {
         return;
@@ -567,6 +582,14 @@ export default {
 </script>
 
 <style scoped>
+.targeted {
+  border: 2px solid red;
+}
+
+.movClass {
+  display: none;
+}
+
 .ghostClass {
   z-index: 101;
   background: red;

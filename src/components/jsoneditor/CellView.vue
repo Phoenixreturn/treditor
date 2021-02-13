@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="cell-view">
     <span v-if="typeof val[1][val[0]] === 'string'">
       <click-to-edit-string :value="val"></click-to-edit-string
     ></span>
@@ -49,3 +49,15 @@ export default {
   },
 };
 </script>
+
+<style>
+.cell-view p {
+  margin: 0;
+  overflow: hidden;
+}
+
+.cell-view input {
+  overflow: hidden;
+  max-width: 100%;
+}
+</style>

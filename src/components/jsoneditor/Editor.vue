@@ -7,6 +7,7 @@
   >
     <div
       class="dynamic-divider"
+      :class="{ dividerCursor: resizing}"
       :style="{ left: keyColumnWidth }"
       @mousedown="mousedownSplit"
       @mouseup="mouseupSplit"
@@ -29,24 +30,6 @@
         <div :style="{ width: valueColumnWidth }"><CellView :val="entry" /></div>
       </div>
     </div>
-    <!-- <table>
-      <thead>
-        <tr class="hover:vue-ads-bg-blue-500">
-          <th><i class="fa fa-camera-retro"></i>Key</th>
-          <th><i class="fa fa-check-square"></i>Value</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          class="hover:vue-ads-bg-blue-500"
-          v-for="entry in flattenedValues.entries()"
-          :key="entry[0]"
-        >
-          <td>{{ entry[0] }}</td>
-          <td><CellView :val="entry"></CellView></td>
-        </tr>
-      </tbody>
-    </table> -->
   </div>
 </template>
 
