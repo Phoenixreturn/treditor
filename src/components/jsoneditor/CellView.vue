@@ -1,49 +1,70 @@
 <template>
   <div class="cell-view">
-    <span v-if="typeof val[1][val[0]] === 'string'">
-      <click-to-edit-string :value="val"></click-to-edit-string
-    ></span>
-    <span v-else-if="typeof val[1][val[0]] === 'number'">
-      <click-to-edit-number :value="val"></click-to-edit-number>
-    </span>
-    <span v-else-if="typeof val[1][val[0]] === 'object'">
-      <children-button
-        v-on:click.native="setExpanded"
-        :expanded="expandedSign"
-        :loading="false"
-      >
-      </children-button>
-    </span>
-    <span v-else></span>
+    <component
+      v-bind="currentEditCellComponent.attr"
+      v-on="currentEditCellComponent.events"
+      v-bind:is="currentEditCellComponent.type"
+      @click.native="setExpanded(currentEditCellComponent.type)"
+    />
   </div>
 </template>
 
 <script>
-import ClickToEditString from './ClickToEditString.vue';
-import ClickToEditNumber from './ClickToEditNumber.vue';
-import ChildrenButton from './ChildrenButton.vue';
-
-import Vue from 'vue';
-
+import ClickToEditString from "./ClickToEditString.vue";
+import ClickToEditNumber from "./ClickToEditNumber.vue";
+import ChildrenButton from "./ChildrenButton.vue";
+import Vue from "vue";
 export default {
-  name: 'CellView',
+  name: "CellView",
   components: {
     ClickToEditString,
     ClickToEditNumber,
     ChildrenButton,
   },
-  props: ['val'],
+  props: ["val"],
   methods: {
-    setExpanded() {
-      Vue.set(this.val, 'expanded', !this.expandedSign);
+    setExpanded(type) {
+      if (type == "ChildrenButton") {
+        Vue.set(this.val, "expanded", !this.expandedSign);
+      }
     },
   },
   computed: {
     expandedSign() {
-      if (Object.prototype.hasOwnProperty.call(this.val, 'expanded')) {
-        return this.val['expanded'];
+      if (Object.prototype.hasOwnProperty.call(this.val, "expanded")) {
+        return this.val["expanded"];
       } else {
         return false;
+      }
+    },
+    currentEditCellComponent() {
+      if (typeof this.val[1][this.val[0]] === "string") {
+        return {
+          type: "ClickToEditString",
+          attr: {
+            value: this.val,
+          },
+          events: {},
+        };
+      } else if (typeof this.val[1][this.val[0]] === "number") {
+        return {
+          type: "ClickToEditNumber",
+          attr: {
+            value: this.val,
+          },
+          events: {},
+        };
+      } else if (typeof this.val[1][this.val[0]] === "object") {
+        return {
+          type: "ChildrenButton",
+          attr: {
+            expanded: this.expandedSign,
+            loading: false,
+          },
+          events: {},
+        };
+      } else {
+        return {};
       }
     },
   },
@@ -55,7 +76,6 @@ export default {
   margin: 0;
   overflow: hidden;
 }
-
 .cell-view input {
   overflow: hidden;
   max-width: 100%;
