@@ -16,18 +16,18 @@
 </template>
 
 <script>
-import primitives from '../whiteboard/primitives/primitive.type.js'
-import operations from '../../store/operation.types.js'
+import primitives from '../whiteboard/primitives/primitive.type.js';
+import operations from '../../store/operation.types.js';
 
 export default {
-  name: "TopPanel",
+  name: 'TopPanel',
   methods: {
-    onClick(primitiveType, event) {
+    onClick(primitiveType) {
       if (this.$store.state.event.primitive != primitiveType) {
         this.$store.state.event.primitive = primitiveType;
         this.$store.state.event.type = operations.INIT;
       }
-      switch(this.$store.state.event.type) {
+      switch (this.$store.state.event.type) {
         case operations.INIT:
           this.$store.state.event.type = operations.CREATE;
           break;
@@ -35,14 +35,14 @@ export default {
           this.$store.state.event.type = operations.INIT;
           break;
         default:
-            break;
-        }      
-    }
+          break;
+      }
+    },
   },
   computed: {
-    primitives: function() {
+    primitives: function () {
       return primitives;
-    }
-  }
-}
+    },
+  },
+};
 </script>

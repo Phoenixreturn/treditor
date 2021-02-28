@@ -1,6 +1,6 @@
 <template>
   <div>
-    <svg  width="100%" height="100%" viewBox="450 115 24 24">
+    <svg width="100%" height="100%" viewBox="450 115 24 24">
       <use xlink:href="#draw-rectangle" />
     </svg>
   </div>
@@ -8,7 +8,6 @@
 
 <script>
 export default {
-  name: "RectangleIcon",
-}
+  name: 'RectangleIcon',
+};
 </script>
-

@@ -20,23 +20,20 @@
     </p>
     <strong>Authorities:</strong>
     <ul>
-      <li v-for="(role, index) in currentUser.roles" :key="index">{{ role }}</li>
+      <li v-for="(role, index) in currentUser.roles" :key="index">
+        {{ role }}
+      </li>
     </ul>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Profile",
+  name: 'Profile',
   computed: {
     currentUser() {
-      return this.$store.state.auth.user
+      return this.$store.state.auth.user;
     },
-  },
-  mounted() {
-    if (!this.currentUser) {
-      this.$router.push("/login")
-    }
-  },
-}
+  }
+};
 </script>

@@ -1,7 +1,7 @@
-import NonCircle from './NonCircle'
+import NonCircle from './NonCircle';
 
 class Rectangle extends NonCircle {
-    type = 'vRect'
+  type = 'vRect';
 }
 
-export default Rectangle
+export default Rectangle;

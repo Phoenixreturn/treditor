@@ -1,16 +1,17 @@
-import axios from "axios";
-    
-const httpClient = axios.create({    
-    baseURL: 'http://localhost:7777/treditor/',
+import axios from 'axios';
+
+const httpClient = axios.create({
+  baseURL: 'http://localhost:7777/treditor/',
 });
 
-httpClient.interceptors.request.use(function (config) {
-    let user = JSON.parse(localStorage.getItem('user'));
+httpClient.interceptors.request.use(function(config) {
+  let user = JSON.parse(localStorage.getItem('user'));
 
-    config.headers.Authorization = 
-                user && user.accessToken ? `Bearer ${user.accessToken}` : ''
+  if (user && user.accessToken) {
+    config.headers.Authorization = 'Bearer ' + user.accessToken;
+  }
 
-    return config
-})
+  return config;
+});
 
-export default httpClient
+export default httpClient;
