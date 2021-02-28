@@ -4,22 +4,21 @@
       <TopPanel @create="createComponent"></TopPanel>
     </v-row>
     <v-row class="ma-0 pa-0 ttttttt" style="height: 92%">
-      <v-col class="ma-0 pa-0" v-if="items1.length > 0" :cols="2">
+      <v-col class="ma-0 pa-0" v-show="items1.length > 0" :cols="2">
         <v-card class="rounded-0">
           <v-tabs v-model="tab" background-color="primary" dark>
             <v-tab v-for="item in items1" :key="item.tab">{{ item.tab }}</v-tab>
           </v-tabs>
-
           <v-tabs-items v-model="tab">
-            <v-tab-item v-for="item in items1" :key="item.tab">
-              <draggable
-                v-model="items1"
-                v-bind="{ ghostClass: 'movClass' }"
-                @start="showCurtain"
-                @end="displayValue = 'none'"
-                :move="checkMove"
-                :options="{ group: 'people', revertOnSpill: true }"
-              >
+            <draggable
+              v-model="items1"
+              v-bind="{ ghostClass: 'movClass' }"
+              @start="showCurtain"
+              @end="dragEnd"
+              :move="checkMove"
+              :options="{ group: 'people', revertOnSpill: true }"
+            >
+              <v-tab-item v-for="item in items1" :key="item.tab">
                 <transition-group>
                   <component
                     v-bind:is="item.type"
@@ -27,11 +26,12 @@
                     :objProps="item.objProps"
                   ></component>
                 </transition-group>
-              </draggable>
-            </v-tab-item>
+              </v-tab-item>
+            </draggable>
           </v-tabs-items>
         </v-card>
       </v-col>
+
       <v-col
         @contextmenu.capture.prevent
         class="ma-0 pa-0"
@@ -84,7 +84,7 @@
           v-model="items2"
           v-bind="{ ghostClass: 'movClass' }"
           @start="showCurtain"
-          @end="displayValue = 'none'"
+          @end="dragEnd"
           :move="(event) => highlightTarget(event, 'dropArea')"
           :options="{
             group: 'people',
@@ -320,6 +320,10 @@ export default {
     });
   },
   methods: {
+    dragEnd() {
+      console.log("dragEnd");
+      this.displayValue = "none";
+    },
     onSpill(event, str) {
       console.log(str);
       console.log(event);
@@ -346,6 +350,7 @@ export default {
       this.displayValue = "none";
     },
     showCurtain() {
+      console.log("show curtain");
       this.displayValue = "flex";
     },
     checkMove() {
